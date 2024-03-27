@@ -35,6 +35,9 @@ const ProgrammingLanguageRoute = require("./routes/programmingLanguagesRoute.js"
 
 //Language
 const LanguageRoute = require("./routes/languageRoutes.js")
+
+//Content
+const ContentRoute = require("./routes/contentRoute.js")
 // console.log(mongoose.version); 
 mongoose.connect(process.env.URI)
 .then(()=>{
@@ -59,3 +62,4 @@ app.use(categoryRoute);
 app.use(subCategoryRoute);
 app.use(ProgrammingLanguageRoute);
 app.use(LanguageRoute);
+app.use(ContentRoute);
