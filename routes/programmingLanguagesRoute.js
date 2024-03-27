@@ -20,7 +20,7 @@ router.post("/programmingLanguage/create", async(req,res) =>{
         return res
             .status(HTTPStatusCode.CREATED)
             .json({message:ErrorMessages.CREATED,
-                ProgrammingLanguage:createProgrammingLanguage 
+                data:createProgrammingLanguage 
             })
     }catch{
         return res
@@ -36,7 +36,7 @@ router.get('/getAllProgrammingLanguage', async(req,res) =>{
         return res
              .status(HTTPStatusCode.OK)
              .json({message:ErrorMessages.GETDATA,
-                ProgrammingLanguage:getAllProgrammingLanguage
+                data:getAllProgrammingLanguage
         })
     }catch{
         return res
@@ -55,7 +55,7 @@ router.get('/programmingLanguage/:id' , async(req,res) =>{
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({message:ErrorMessages.GETDATA,
-                        ProgrammingLanguage:singleProgrammingLanguage
+                        data:singleProgrammingLanguage
                     })
             }
             else{
@@ -91,7 +91,7 @@ router.patch('/programmingLanguage/update/:id', async(req,res) =>{
                 return res
                 .status(HTTPStatusCode.OK)
                 .json({message:ErrorMessages.UPDATED,
-                    ProgrammingLanguage:updateProgrammingLanguage
+                    data:updateProgrammingLanguage
                 })
            }
            else{
@@ -123,7 +123,7 @@ router.delete('/programmingLanguage/delete/:id', async(req,res) =>{
                 return res
                 .status(HTTPStatusCode.OK)
                 .json({message:ErrorMessages.DELETED,
-                    ProgrammingLanguage:deleteProgrammingLanguage
+                    data:deleteProgrammingLanguage
                 })
            }
            else{

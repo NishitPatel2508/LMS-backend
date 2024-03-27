@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const videoSchema = mongoose.Schema(
     {
-        thubnail:{
+        thumbnail:{
             type: String,
             require: [true, "Please, Enter thubnail of video"]
         },

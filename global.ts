@@ -19,6 +19,8 @@ class ErrorMessages {
     SUBCATEGORY_EXIST = "Subcategory already exists";
     PROGRAMMING_LANGUAGE_EXIST = "Programming Language already exists";
     LANGUAGE_EXIST = "Language already exists";
+    VIDEO_EXIST = "Video already exists";
+    CHAPTER_EXIST = "Chapter already exists";
     WRONG_CREDENTIALS = "Invalid Credentials";
     SUCCESS = "Login Successfully";
     NOT_EXISTS = "Data does not exists";
