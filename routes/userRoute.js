@@ -31,7 +31,7 @@ router.post('/users/createuser', async (req,res)=>{
             usertype:usertype,
             createdBy:createdBy
         }) 
-        return res.status(HTTPStatusCode.CREATED).json({ message: ErrorMessages.USER_REGISTER_SUCCESS, user:userCreate})
+        return res.status(HTTPStatusCode.CREATED).json({ message: ErrorMessages.USER_REGISTER_SUCCESS, data:userCreate})
 
     } catch(error){
         console.log(error);

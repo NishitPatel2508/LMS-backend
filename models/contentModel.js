@@ -1,16 +1,17 @@
 const mongoose = require("mongoose")
 const contentSchema = mongoose.Schema(
     {
-        chapterName:{
-            type: String,
-            require: [true,"Please, Enter name of chapter"]
+        
+        chapterId:{
+            type: mongoose.Schema.Types.Array,
+            ref:"Chapter"
         },
         contentFileId:{
             type: mongoose.Schema.Types.ObjectId,
             ref:"contnetFile"
         },
         contentVideoId:{
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.Array,
             ref:"contnetVideo"
         },
         createdBy:{

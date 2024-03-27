@@ -20,7 +20,7 @@ router.post("/category/create", async(req,res) =>{
         return res
             .status(HTTPStatusCode.CREATED)
             .json({message:ErrorMessages.CREATED,
-                category:createCategory
+                data:createCategory
             })
     }catch{
         return res
@@ -36,7 +36,7 @@ router.get('/getAllCategory', async(req,res) =>{
         return res
              .status(HTTPStatusCode.OK)
              .json({message:ErrorMessages.GETDATA,
-                 category:getAllCategory
+                 data:getAllCategory
         })
     }catch{
         return res
@@ -55,7 +55,7 @@ router.get('/category/:id' , async(req,res) =>{
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({message:ErrorMessages.GETDATA,
-                        category:singleCategory
+                        data:singleCategory
                     })
             }
             else{
@@ -91,7 +91,7 @@ router.patch('/category/update/:id', async(req,res) =>{
                 return res
                 .status(HTTPStatusCode.OK)
                 .json({message:ErrorMessages.UPDATED,
-                    category:updateCategory
+                    data:updateCategory
                 })
            }
            else{
@@ -123,7 +123,7 @@ router.delete('/category/delete/:id', async(req,res) =>{
                 return res
                 .status(HTTPStatusCode.OK)
                 .json({message:ErrorMessages.DELETED,
-                    category:deleteCategory
+                    data:deleteCategory
                 })
            }
            else{

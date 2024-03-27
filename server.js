@@ -36,6 +36,18 @@ const ProgrammingLanguageRoute = require("./routes/programmingLanguagesRoute.js"
 //Language
 const LanguageRoute = require("./routes/languageRoutes.js")
 
+//Chapter
+const ChapterRoute = require("./routes/chapterRoute.js")
+
+//ContentVideo
+const ContentVideoRoute = require("./routes/contentVideoRoute.js")
+
+//Video
+const VideoRoute = require("./routes/videoRoute.js")
+
+//Review
+const ReviewRoute = require("./routes/reviewRoute.js")
+
 //Content
 const ContentRoute = require("./routes/contentRoute.js")
 // console.log(mongoose.version); 
@@ -62,4 +74,8 @@ app.use(categoryRoute);
 app.use(subCategoryRoute);
 app.use(ProgrammingLanguageRoute);
 app.use(LanguageRoute);
+app.use(ChapterRoute);
+app.use(ContentVideoRoute);
+app.use(VideoRoute);
+app.use(ReviewRoute);
 app.use(ContentRoute);

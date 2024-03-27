@@ -20,7 +20,7 @@ router.post("/Language/create", async(req,res) =>{
         return res
             .status(HTTPStatusCode.CREATED)
             .json({message:ErrorMessages.CREATED,
-                Language:createLanguage
+                data:createLanguage
             })
     }catch{
         return res
@@ -36,7 +36,7 @@ router.get('/getAllLanguages', async(req,res) =>{
         return res
              .status(HTTPStatusCode.OK)
              .json({message:ErrorMessages.GETDATA,
-                Languages:getAllLanguages
+                data:getAllLanguages
         })
     }catch{
         return res
@@ -55,7 +55,7 @@ router.get('/language/:id' , async(req,res) =>{
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({message:ErrorMessages.GETDATA,
-                        Language:singleLanguage
+                        data:singleLanguage
                     })
             }
             else{
@@ -91,7 +91,7 @@ router.patch('/language/update/:id', async(req,res) =>{
                 return res
                 .status(HTTPStatusCode.OK)
                 .json({message:ErrorMessages.UPDATED,
-                    Language:updateLanguage
+                    data:updateLanguage
                 })
            }
            else{
@@ -123,7 +123,7 @@ router.delete('/language/delete/:id', async(req,res) =>{
                 return res
                 .status(HTTPStatusCode.OK)
                 .json({message:ErrorMessages.DELETED,
-                    Language:deleteLanguage
+                    data:deleteLanguage
                 })
            }
            else{

@@ -1,173 +1,59 @@
 const mongoose = require("mongoose")
 const express = require("express")
-const ObjectId =  mongoose.Types.ObjectId;
-const Content = require("../models/contentModel")
 const router = express.Router()
-const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+const Content = require("../models/contentModel")
+const Chapter = require('../models/chapterModel');
+const ContentVideo = require('../models/contnetVideoModel');
+const ObjectId = mongoose.Types.ObjectId
+const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
 
-//Create
-router.post('/content/create' , async(req,res) =>{
-    const {chapterName} = req.body
-    const contentExist = await Content.findOne({chapterName:chapterName})
-    if(contentExist){
-        return res
-            .status(HTTPStatusCode.BAD_REQUEST)
-            .json({message:ErrorMessages.CHAPTER_EXIST})
-    }
+// Create
+router.post('/content/create', async(req,res) => {
     try {
+        let {chapterId,contentVideoId} = req.body
+        // let chapterId,
+        // let chapterId = ""
+        // let contentVideoId = []
+
+        const chapter = await Chapter.find();
+        const video = await ContentVideo.find();
+        if(chapter && video){
+            let arrOfChapter = []
+            chapter.forEach(ele => {
+                arrOfChapter.push(ele._id);
+            });
+            chapterId = arrOfChapter;
+            let arrOfVideo = []
+            video.forEach(ele => {
+                arrOfVideo.push(ele._id);
+            });
+            contentVideoId = arrOfVideo;
+        }
+        else{
+            return res
+                .status(HTTPStatusCode. BAD_REQUEST)
+                .json({
+                    message: ErrorMessages. WRONG_CREDENTIALS
+            })  
+        }
         const createContent = await Content.create({
-            chapterName:chapterName
+                chapterId:chapterId,
+                contentVideoId:contentVideoId
         })
         return res
-            .status(HTTPStatusCode.CREATED)
-            .json({
-                message:ErrorMessages.CREATED,
-                content:createContent
-            })
+                .status(HTTPStatusCode.CREATED)
+                .json({
+                    message:ErrorMessages.CREATED,
+                    data: createContent,
+                })
     } catch (error) {
         return res
             .status(HTTPStatusCode.INTERNAL_SERVER)
-            .json({ message:ErrorMessages.INTERNAL_SERVER,
-                    error:error.message
-                })
+            .json({
+                message: ErrorMessages.INTERNAL_SERVER,
+                error: error.message
+        })
     }
 })
 
-//Get All Content
-router.get('/getAllContent' , async(req,res) =>{
-    try{
-        const getAllContent = await Content.find()
-        return res
-            .status(HTTPStatusCode.OK)
-            .json({
-                message:ErrorMessages.GETDATA,
-                content: getAllContent
-            })
-    }
-    catch(error){
-        return res
-                .status(HTTPStatusCode.INTERNAL_SERVER)
-                .json({
-                    message: ErrorMessages.INTERNAL_SERVER,
-                    error: error.message
-                })
-    }
-})
-
-//Get Single Contnent
-router.get('/content/:id', async(req,res) =>{
-    const id = req.params.id;
-    try {
-        if(ObjectId.isValid(id)){
-            const contentdetails = await Content.findOne({_id:id})
-            if(contentdetails){
-                return res
-                    .status(HTTPStatusCode.OK)
-                    .json({message: ErrorMessages.GETDATA,
-                        content :contentdetails
-                    })
-            }
-            else{
-                return res
-                    .status(HTTPStatusCode.BAD_REQUEST)
-                    .json({
-                        message: ErrorMessages.NOT_EXISTS
-                    }) 
-            }
-        }
-        else{
-            return res
-                .status(HTTPStatusCode. BAD_REQUEST)
-                .json({
-                    message: ErrorMessages. WRONG_CREDENTIALS
-                }) 
-        }  
-    }catch(error){
-        return res
-            .status(HTTPStatusCode.INTERNAL_SERVER)
-            .json({
-                    message: ErrorMessages.INTERNAL_SERVER,
-                    error: error.message
-            })
-    } 
-    
-})
-//Update
-router.patch('/content/update/:id', async(req,res) => {
-    const id = req.params.id;
-    try {
-        if(ObjectId.isValid(id)){
-            const contentUpdate = await Content.findByIdAndUpdate(id, req.body, {
-                new:true
-            })
-
-            if(contentUpdate){
-                return res
-                .status(HTTPStatusCode.OK)
-                .json({message: ErrorMessages.UPDATED,
-                    content :contentUpdate
-                })
-            }
-            else{
-                return res
-                .status(HTTPStatusCode.BAD_REQUEST)
-                .json({message:ErrorMessages.NOT_EXISTS})
-           }
-          
-        }
-        else{
-            return res
-                .status(HTTPStatusCode. BAD_REQUEST)
-                .json({
-                    message: ErrorMessages. WRONG_CREDENTIALS
-                }) 
-        }  
-    }catch(error){
-        return res
-            .status(HTTPStatusCode.INTERNAL_SERVER)
-            .json({
-                    message: ErrorMessages.INTERNAL_SERVER,
-                    error: error.message
-            })
-    } 
-})
-
-//Delete
-router.delete('/content/delete/:id', async(req,res) => {
-    const id = req.params.id;
-    try{
-            if(ObjectId.isValid(id)){
-                const contentDelete = await Content.findByIdAndDelete({_id:id})
-                if(contentDelete){
-                    return res
-                        .status(HTTPStatusCode.OK)
-                        .json({
-                            message:ErrorMessages.DELETED,
-                            contetn: contentDelete
-                        })
-                }
-                else{
-                    return res
-                    .status(HTTPStatusCode.BAD_REQUEST)
-                    .json({
-                        message:ErrorMessages.NOT_EXISTS
-                    })
-                }
-            }
-            else{
-                return res
-                    .status(HTTPStatusCode.BAD_REQUEST)
-                    .json({
-                        message:ErrorMessages.WRONG_CREDENTIALS
-                    }) 
-            }
-    }
-    catch(error){
-        return res
-            .status(HTTPStatusCode.INTERNAL_SERVER)
-            .json({
-                message:ErrorMessages.INTERNAL_SERVER
-            })
-    }
-})
 module.exports = router;
