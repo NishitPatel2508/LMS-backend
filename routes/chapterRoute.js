@@ -2,22 +2,35 @@ const mongoose = require("mongoose")
 const express = require("express")
 const ObjectId =  mongoose.Types.ObjectId;
 const Chapter = require("../models/chapterModel")
+const Course = require("../models/courseModel")
 const router = express.Router()
 const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
 
 //Create
 router.post('/chapter/create' , async(req,res) =>{
-    const {chapterName} = req.body
+    let {chapterName,courseId} = req.body
    
     try {
+        // const allCourse = await Course.aggregate([
+        //     {
+        //         $group: {
+        //             _id:"$_id",
+        //         },
+        //     },
+        // ]);
+       
+        //Course Id Valid or not
+        const courseID = await Course.findById({_id:courseId})
         const chapterExist = await Chapter.findOne({chapterName:chapterName})
         if(chapterExist){
             return res
                 .status(HTTPStatusCode.BAD_REQUEST)
                 .json({message:ErrorMessages.CHAPTER_EXIST})
         }
+
         const createChapter = await Chapter.create({
-            chapterName:chapterName
+            chapterName:chapterName,
+            courseId:courseId
         })
         return res
             .status(HTTPStatusCode.CREATED)

@@ -14,6 +14,7 @@ class ErrorMessages {
     COUNTRY_EXIST = "Country already exists";
     STATE_EXIST = "Country already exists";
     CITY_EXIST = "City already exists";
+    COURSE_EXIST = "Course already exists";
     MOBILE_NO_EXIST = "Mobile Number already exists";
     CATEGORY_EXIST = "Category already exists";
     SUBCATEGORY_EXIST = "Subcategory already exists";

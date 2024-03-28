@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 const programmingLanguageSchema = mongoose.Schema(
     {
-        subCategoryId:{
+        subCategoryId:[{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Subcategory"
-        },
+        }],
         programmingLanguageName:{
             type: String,
             require: [true,"Please, Enter name of language"]
