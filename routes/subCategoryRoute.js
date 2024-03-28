@@ -7,11 +7,10 @@ const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
 const Category = require("../models/categoryModel")
 //Create
 router.post("/subCategory/create", async(req,res) =>{
-    const {subCategoryName} = req.body;
+    const {subCategoryName,categoryId} = req.body;
     try{
-        const category = await Category.findOne({categoryName : 'IT & Software'})
+        const category = await Category.findById({_id:categoryId})
         console.log(category);
-        const categoryID = category._id
         const singleSubCategory = await Subcategory.findOne({subCategoryName:subCategoryName})
         if(singleSubCategory){
             return res
@@ -19,13 +18,14 @@ router.post("/subCategory/create", async(req,res) =>{
                 .json({message:ErrorMessages.SUBCATEGORY_EXIST})
         }
         const createSubCategory = await Subcategory.create({
-            categoryid:categoryID, 
+            categoryId:categoryId, 
             subCategoryName:subCategoryName
         })
         return res
             .status(HTTPStatusCode.CREATED)
             .json({message:ErrorMessages.CREATED,
-                SubCategory:createSubCategory
+                SubCategory:createSubCategory,
+
             })
     }catch{
         return res

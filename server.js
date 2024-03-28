@@ -50,6 +50,9 @@ const ReviewRoute = require("./routes/reviewRoute.js")
 
 //Content
 const ContentRoute = require("./routes/contentRoute.js")
+
+//Course
+const CourseRoute = require("./routes/courseRoute.js")
 // console.log(mongoose.version); 
 mongoose.connect(process.env.URI)
 .then(()=>{
@@ -79,3 +82,4 @@ app.use(ContentVideoRoute);
 app.use(VideoRoute);
 app.use(ReviewRoute);
 app.use(ContentRoute);
+app.use(CourseRoute);

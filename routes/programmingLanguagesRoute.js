@@ -2,12 +2,14 @@ const mongoose = require("mongoose")
 const express = require("express")
 const router = express.Router();
 const ProgrammingLanguage = require("../models/programmingLanguagesModel")
+const Subcategory = require("../models/subcategoryModel")
 const ObjectId = mongoose.Types.ObjectId;
 const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
 //Create
 router.post("/programmingLanguage/create", async(req,res) =>{
-    const { programmingLanguageName} = req.body;
+    const { programmingLanguageName,subCategoryId} = req.body;
     try{
+        const subCategory = await Subcategory.findById({_id:subCategoryId});
         const programmingLanguageExistCheck = await ProgrammingLanguage.findOne({ programmingLanguageName: programmingLanguageName})
         if(programmingLanguageExistCheck){
             return res
@@ -15,6 +17,7 @@ router.post("/programmingLanguage/create", async(req,res) =>{
                 .json({message:ErrorMessages.PROGRAMMING_LANGUAGE_EXIST})
         }
         const createProgrammingLanguage = await ProgrammingLanguage.create({
+            subCategoryId:subCategoryId,
             programmingLanguageName: programmingLanguageName
         })
         return res

@@ -4,32 +4,36 @@ const courseSchema = new mongoose.Schema(
         name:{
             type: String,
             required:[true, "Please, Enter a course name"],
-            lowercase:true
         },
-        category:{
-            type: String,
-            required:[true, "Please, Enter a category name"],
-            lowercase:true
-        },
+        categoryId:[{
+            type: mongoose.Schema.Types.ObjectId,
+            // required:[true, "Please Enter a Category"],
+            ref:"Category",
+        }],
+        subCategoryId:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"Subcategory",
+        }],
+        programmingLanguageId:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"ProgrammingLanguage",
+        }],
         overview:{
             type: String,
             required:[true, "Please, write overview"],
-            lowercase:true
         },
         description:{
             type: String,
             required:[true, "Please, enter description"],
-            lowercase:true
         },
         content:{
-            type: String,
-            required:[true, "Please, content of course"],
-            lowercase:true
+            type: mongoose.Schema.Types.ObjectId,
+            // required:[true, "Please, content of course"],
+            ref:"Content",
         },
         requirement:{
             type: String,
             required:[true, "Please, Enter requirement of course"],
-            lowercase:true
         },
         price:{
             type: Number,
@@ -39,22 +43,23 @@ const courseSchema = new mongoose.Schema(
         discount:{
             type: Number,
         },
-        language:{
-            type: String,
-            required:[true, "Please, Enter a language of course"],
-        },
+        languageId:[{
+            type: mongoose.Schema.Types.ObjectId,
+           // required:[true, "Please, Enter a language of course"],
+            ref:"Language", 
+        }],
         level:{
             type: String,
-            required:[true, "Please, Enter a level of course"],
+            // required:[true, "Please, Enter a level of course"],
             enum:["Expert","Intermediate","Beginner"]
         },
         courseImg:{
             type:String,
-            required:[true, "Please, Upload Image of Course"],
+            // required:[true, "Please, Upload Image of Course"],
         },
         deadline:{
             type: Date,
-            required:[true, "Please, deadline of Course"],
+            // required:[true, "Please, deadline of Course"],
         },
         file:{
             type: mongoose.Schema.Types.ObjectId,

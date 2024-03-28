@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 const subCategorySchema = mongoose.Schema(
     {
-        categoryid:{
+        categoryId:[{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Category"
-        },
+        }],
         subCategoryName:{
             type:String,
             require:[true,"Please Enter name of subcategory"]
