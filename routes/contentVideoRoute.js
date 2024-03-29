@@ -8,7 +8,7 @@ const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
 //Create
 router.post('/contentvideo/create', async(req,res) => {
     const {videoLink,thumbnail} = req.body;
-    const contentChapterId = await Content.find
+    // const contentChapterId = await Content.find
     const videoLinkExist = await ContentVideo.findOne({videoLink:videoLink})
     if(videoLinkExist){
         return res

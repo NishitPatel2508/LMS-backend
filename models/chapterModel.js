@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 const chapterSchema = mongoose.Schema(
     {
-        courseId:[{ 
+        course:{ 
             type: mongoose.Schema.Types.ObjectId,
             ref:"Course"
-        }],
+        },
         chapterName:{
             type: String,
             require: [true,"Please, Enter name of chapter"]

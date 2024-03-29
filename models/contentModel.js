@@ -1,23 +1,22 @@
 const mongoose = require("mongoose")
 const contentSchema = mongoose.Schema(
     {
-        
-        courseId:[{ 
+        courseDetailes:{ 
             type: mongoose.Schema.Types.ObjectId,
             ref:"Course"
-        }],
-        chapterId:[{
+        },
+        chapterDetailes:{
             type: mongoose.Schema.Types.ObjectId,
             ref:"Chapter"
-        }],
-        contentFileId:[{
+        },
+        contentFileDetailes:{
             type: mongoose.Schema.Types.ObjectId,
-            ref:"contnetFile"
-        }],
-        contentVideoId:[{
+            ref:"ContentFile"
+        },
+        contentVideoDetailes:{
             type: mongoose.Schema.Types.ObjectId,
-            ref:"contnetVideo"
-        }],
+            ref:"ContentVideo"
+        },
         createdBy:{
             type: mongoose.Schema.Types.ObjectId,
             ref:"User"

@@ -46,6 +46,7 @@ router.post('/course/createCourse', async(req,res) =>{
             })
         }
         const courseCreate = await Course.create({
+            //Model Name : Value of that Field
             name:name,
             overview:overview,
             description:description,
@@ -53,10 +54,10 @@ router.post('/course/createCourse', async(req,res) =>{
             category:category,
             subCategory:subCategory,
             programmingLanguage:programmingLanguage,
+            language:language,
             price:price,
             discount:discount,
             level:level,
-            language:language,
             deadline:deadline
         }) 
         return res
@@ -76,7 +77,25 @@ router.post('/course/createCourse', async(req,res) =>{
 //Get All Data
 router.get('/getAllCourse', async(req,res) =>{
     try {
-        const getAllCourse = await Course.find()
+        const getAllCourse = await Course.find();
+        for (const fieldNames of getAllCourse) {
+            const category = await Category.findById({_id:fieldNames.category})
+            if(category){
+                fieldNames.category = category
+            }
+            const subCategory = await Subcategory.findById({_id:fieldNames.subCategory})
+            if(subCategory){
+                fieldNames.subCategory = subCategory
+            }
+            const programmingLanguage = await ProgrammingLanguage.findById({_id:fieldNames.programmingLanguage})
+            if(programmingLanguage){
+                fieldNames.programmingLanguage = programmingLanguage
+            }
+            const language = await Language.findById({_id:fieldNames.language});
+            if(language){
+                fieldNames.language = language
+            }
+        }
         return res
             .status(HTTPStatusCode.OK)
             .json({
@@ -99,6 +118,22 @@ router.get('/course/:id', async(req,res) =>{
         if(ObjectId.isValid(id)){
             const getSingleCourse = await Course.findById({_id:id})
             if(getSingleCourse){
+                    const category = await Category.findById({_id:getSingleCourse.category})
+                    if(category){
+                        getSingleCourse.category = category
+                    }
+                    const subCategory = await Subcategory.findById({_id:getSingleCourse.subCategory})
+                    if(subCategory){
+                        getSingleCourse.subCategory = subCategory
+                    }
+                    const programmingLanguage = await ProgrammingLanguage.findById({_id:getSingleCourse.programmingLanguage})
+                    if(programmingLanguage){
+                        getSingleCourse.programmingLanguage = programmingLanguage
+                    }
+                    const language = await Language.findById({_id:getSingleCourse.language});
+                    if(language){
+                        getSingleCourse.language = language
+                    }
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({

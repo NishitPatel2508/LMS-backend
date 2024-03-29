@@ -11,13 +11,15 @@ router.post("/programmingLanguage/create", async(req,res) =>{
     try{
         const subCategory = await Subcategory.findById({_id:subCategoryId});
         const programmingLanguageExistCheck = await ProgrammingLanguage.findOne({ programmingLanguageName: programmingLanguageName})
-        if(programmingLanguageExistCheck){
+       
+    
+        if(programmingLanguageExistCheck){  
             return res
                 .status(HTTPStatusCode.BAD_REQUEST)
                 .json({message:ErrorMessages.PROGRAMMING_LANGUAGE_EXIST})
         }
         const createProgrammingLanguage = await ProgrammingLanguage.create({
-            subCategoryId:subCategoryId,
+            subCategoryId:subCategory,
             programmingLanguageName: programmingLanguageName
         })
         return res
@@ -36,6 +38,12 @@ router.post("/programmingLanguage/create", async(req,res) =>{
 router.get('/getAllProgrammingLanguage', async(req,res) =>{
     try{
         const getAllProgrammingLanguage = await ProgrammingLanguage.find()
+        for (const fieldNames of getAllProgrammingLanguage) {
+            const subCategory = await Subcategory.findById({_id:fieldNames.subCategoryId})
+            if(subCategory){
+                fieldNames.subCategoryId = subCategory
+            }
+        }
         return res
              .status(HTTPStatusCode.OK)
              .json({message:ErrorMessages.GETDATA,
@@ -54,6 +62,10 @@ router.get('/programmingLanguage/:id' , async(req,res) =>{
     try{
         if(ObjectId.isValid(id)){
             const singleProgrammingLanguage = await ProgrammingLanguage.findOne({_id:id})
+            const subCategory = await Subcategory.findById({_id:singleProgrammingLanguage.subCategoryId})
+            if(subCategory){
+                singleProgrammingLanguage.subCategoryId = subCategory
+            }
             if(singleProgrammingLanguage){
                 return res
                     .status(HTTPStatusCode.OK)
