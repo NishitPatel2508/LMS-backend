@@ -33,10 +33,10 @@ router.post('/course/createCourse', async(req,res) =>{
         } = req.body;
     try {
 
-        const categoryID = await Category.findById({_id:categoryId});
-        const subCategoryID = await Subcategory.findById({_id:subCategoryId}) 
-        const languageID = await Language.findById({_id:languageId});
-        const programmingLanguageID = await ProgrammingLanguage.findById({_id:programmingLanguageId})
+        const category = await Category.findById({_id:categoryId});
+        const subCategory = await Subcategory.findById({_id:subCategoryId});
+        const language = await Language.findById({_id:languageId});
+        const programmingLanguage = await ProgrammingLanguage.findById({_id:programmingLanguageId})
         const courseExist = await Course.findOne({name:name})
         if(courseExist){
             return res
@@ -50,13 +50,13 @@ router.post('/course/createCourse', async(req,res) =>{
             overview:overview,
             description:description,
             requirement:requirement,
-            categoryId:categoryId,
-            subCategoryId:subCategoryId,
-            programmingLanguageId:programmingLanguageId,
+            category:category,
+            subCategory:subCategory,
+            programmingLanguage:programmingLanguage,
             price:price,
             discount:discount,
             level:level,
-            languageId:languageId,
+            language:language,
             deadline:deadline
         }) 
         return res
