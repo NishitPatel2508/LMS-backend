@@ -5,19 +5,19 @@ const courseSchema = new mongoose.Schema(
             type: String,
             required:[true, "Please, Enter a course name"],
         },
-        categoryId:[{
-            type: mongoose.Schema.Types.ObjectId,
+        category:{
+            type: mongoose.Schema.Types.Array,
             // required:[true, "Please Enter a Category"],
             ref:"Category",
-        }],
-        subCategoryId:[{
-            type: mongoose.Schema.Types.ObjectId,
+        },
+        subCategory:{
+            type: mongoose.Schema.Types.Array,
             ref:"Subcategory",
-        }],
-        programmingLanguageId:[{
-            type: mongoose.Schema.Types.ObjectId,
+        },
+        programmingLanguage:{
+            type: mongoose.Schema.Types.Array,
             ref:"ProgrammingLanguage",
-        }],
+        },
         overview:{
             type: String,
             required:[true, "Please, write overview"],
@@ -43,11 +43,11 @@ const courseSchema = new mongoose.Schema(
         discount:{
             type: Number,
         },
-        languageId:[{
-            type: mongoose.Schema.Types.ObjectId,
+        language:{
+            type: mongoose.Schema.Types.Array,
            // required:[true, "Please, Enter a language of course"],
             ref:"Language", 
-        }],
+        },
         level:{
             type: String,
             // required:[true, "Please, Enter a level of course"],

@@ -10,7 +10,6 @@ router.post("/subCategory/create", async(req,res) =>{
     const {subCategoryName,categoryId} = req.body;
     try{
         const category = await Category.findById({_id:categoryId})
-        console.log(category);
         const singleSubCategory = await Subcategory.findOne({subCategoryName:subCategoryName})
         if(singleSubCategory){
             return res
