@@ -17,7 +17,7 @@ router.post("/subCategory/create", async(req,res) =>{
                 .json({message:ErrorMessages.SUBCATEGORY_EXIST})
         }
         const createSubCategory = await Subcategory.create({
-            categoryId:categoryId, 
+            categoryId:category, 
             subCategoryName:subCategoryName
         })
         return res
@@ -37,15 +37,28 @@ router.post("/subCategory/create", async(req,res) =>{
 router.get('/getAllSubCategory', async(req,res) =>{
     try{
         const getAllSubCategory= await Subcategory.find()
-        return res
+        if(getAllSubCategory){
+            for (const fieldNames of getAllSubCategory) {
+                const category = await Category.findById({_id:fieldNames.categoryId})
+                if(category){
+                    fieldNames.categoryId = category
+                }
+            }
+    
+            return res
              .status(HTTPStatusCode.OK)
              .json({message:ErrorMessages.GETDATA,
                 subCategory:getAllSubCategory
-        })
-    }catch{
+            })
+        }
+    }
+    catch (error){
         return res
         .status(HTTPStatusCode.INTERNAL_SERVER)
-        .json({message:ErrorMessages.INTERNAL_SERVER})
+        .json({message:ErrorMessages.INTERNAL_SERVER,
+            error :error.message
+            
+        })
     }
 })
 
@@ -56,6 +69,10 @@ router.get('/subCategory/:id' , async(req,res) =>{
         if(ObjectId.isValid(id)){
             const singleSubCategory = await Subcategory.findOne({_id:id})
             if(singleSubCategory){
+                const category = await Category.findById({_id:singleSubCategory.categoryId})
+                if(category){
+                    singleSubCategory.categoryId = category
+                }
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({message:ErrorMessages.GETDATA,

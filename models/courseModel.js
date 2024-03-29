@@ -6,16 +6,16 @@ const courseSchema = new mongoose.Schema(
             required:[true, "Please, Enter a course name"],
         },
         category:{
-            type: mongoose.Schema.Types.Array,
+            type: mongoose.Schema.Types.ObjectId,
             // required:[true, "Please Enter a Category"],
             ref:"Category",
         },
         subCategory:{
-            type: mongoose.Schema.Types.Array,
+            type: mongoose.Schema.Types.ObjectId,
             ref:"Subcategory",
         },
         programmingLanguage:{
-            type: mongoose.Schema.Types.Array,
+            type: mongoose.Schema.Types.ObjectId,
             ref:"ProgrammingLanguage",
         },
         overview:{
@@ -44,7 +44,7 @@ const courseSchema = new mongoose.Schema(
             type: Number,
         },
         language:{
-            type: mongoose.Schema.Types.Array,
+            type: mongoose.Schema.Types.ObjectId,
            // required:[true, "Please, Enter a language of course"],
             ref:"Language", 
         },

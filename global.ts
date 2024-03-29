@@ -15,6 +15,8 @@ class ErrorMessages {
     STATE_EXIST = "Country already exists";
     CITY_EXIST = "City already exists";
     COURSE_EXIST = "Course already exists";
+    CONTENT_EXIST = "Content already exists";
+    CONTENT_VIDEO_EXIST = "Content Video already exists";
     MOBILE_NO_EXIST = "Mobile Number already exists";
     CATEGORY_EXIST = "Category already exists";
     SUBCATEGORY_EXIST = "Subcategory already exists";
@@ -22,6 +24,7 @@ class ErrorMessages {
     LANGUAGE_EXIST = "Language already exists";
     VIDEO_EXIST = "Video already exists";
     CHAPTER_EXIST = "Chapter already exists";
+    INVALID_CHAPTER = "Chapter is from another Course";
     WRONG_CREDENTIALS = "Invalid Credentials";
     SUCCESS = "Login Successfully";
     NOT_EXISTS = "Data does not exists";

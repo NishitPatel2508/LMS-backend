@@ -11,36 +11,51 @@ const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
 // Create By using Id of Particular Course
 router.post('/content/create', async(req,res) => {
     try {
-       
-        let {courseId,chapterId,contentVideoId} = req.body
-        const course= await Course.findById({_id:courseId})
-        const chapter = await Chapter.findById({_id:chapterId})
-        const video = await ContentVideo.findById({_id:contentVideoId})
-
-        //Allow only chapter ids who matched with courseId provided by user
-        // const allChapterId = await Chapter.aggregate([
-        //     {
-        //         $group:{
-        //             _id:"$_id",
-        //         },
-
-        //         $match:{
-        //             "chapterID" :{$courseId : courseId} //Error 
-        //         }
-        //     },
-        // ])
-   
-        const createContent = await Content.create({
-                courseId:courseId,
-                chapterId:chapterId,
-                contentVideoId:contentVideoId
-        })
-        return res
+        const {  
+                course,
+                chapter,
+                contentVideo,    
+            } = req.body
+        const courseID = await Course.findById({_id:course})
+        const chapterDetailes = await Chapter.findById({_id:chapter})
+        const contentVideoID = await ContentVideo.findById({_id:contentVideo})
+        //Chapter is Exist in Content MODEL
+        if(chapterDetailes._id == chapter){
+            return res
+            .status(HTTPStatusCode.BAD_REQUEST)
+            .json({
+                 message: ErrorMessages.CONTENT_EXIST
+            }) 
+        }
+        //Content Video is Exist in Content MODEL
+        if(contentVideoID == contentVideo){
+            return res
+            .status(HTTPStatusCode.BAD_REQUEST)
+            .json({
+                 message: ErrorMessages.CONTENT_VIDEO_EXIST
+            }) 
+        }
+        
+        if(chapterDetailes.course._id == course){
+            const createContent = await Content.create({
+                courseDetailes:courseID,
+                chapterDetailes:chapterDetailes,
+                contentVideoDetailes:contentVideoID
+            })
+            return res
                 .status(HTTPStatusCode.CREATED)
                 .json({
                     message:ErrorMessages.CREATED,
                     data: createContent,
-                })
+                 })
+        }
+        else{
+            return res
+            .status(HTTPStatusCode.BAD_REQUEST)
+            .json({
+                 message: ErrorMessages.INVALID_CHAPTER
+            }) 
+        }
     } catch (error) {
         return res
             .status(HTTPStatusCode.INTERNAL_SERVER)
@@ -53,6 +68,25 @@ router.post('/content/create', async(req,res) => {
 router.get('/getAllContent', async(req,res) => {
     try {
         const getAllContent = await Content.find()
+        if(getAllContent){
+            for(const field of getAllContent) {
+                const courseInfo = await Course.findById({_id:field.courseDetailes})
+                if(courseInfo){
+                    field.courseDetailes = courseInfo
+                }
+                const chapter = await Chapter.findById({_id:field.chapterDetailes})
+                if(chapter){
+                    console.log(chapter.course);
+                    field.chapterDetailes = chapter
+                }
+                const contentVideo = await ContentVideo.findById({_id:field.contentVideoDetailes})
+                if(contentVideo){
+                    field.contentVideoDetailes = contentVideo
+                }
+               
+            }
+
+        }        
         return res
             .status(HTTPStatusCode.OK)
             .json({
@@ -74,6 +108,18 @@ router.get('/content/:id', async(req,res) =>{
         if(ObjectId.isValid(id)){
             const getSingleContent = await Content.findById({_id:id})
             if(getSingleContent){
+                const course = await Course.findById({_id:getSingleContent.courseDetailes})
+                if(course){
+                    getSingleContent.courseDetailes = course
+                }
+                const chapter = await Chapter.findById({_id:getSingleContent.chapterDetailes})
+                if(chapter){
+                    getSingleContent.chapterDetailes = chapter
+                }
+                const contentVideo = await ContentVideo.findById({_id:getSingleContent.contentVideoDetailes})
+                if(contentVideo){
+                    getSingleContent.contentVideoDetailes = contentVideo
+                }
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({

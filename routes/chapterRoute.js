@@ -30,7 +30,7 @@ router.post('/chapter/create' , async(req,res) =>{
 
         const createChapter = await Chapter.create({
             chapterName:chapterName,
-            courseId:courseId
+            course:courseID
         })
         return res
             .status(HTTPStatusCode.CREATED)
@@ -51,6 +51,13 @@ router.post('/chapter/create' , async(req,res) =>{
 router.get('/getAllChapter' , async(req,res) =>{
     try{
         const getAllChapter = await Chapter.find()
+        for (const field of getAllChapter) {
+            if(getAllChapter){
+                const courseDetails= await Course.findById({_id:field.course})
+                field.course = courseDetails
+            }
+        }
+       
         return res
             .status(HTTPStatusCode.OK)
             .json({
@@ -73,12 +80,14 @@ router.get('/chapter/:id', async(req,res) =>{
     const id = req.params.id;
     try {
         if(ObjectId.isValid(id)){
-            const Chapterdetails = await Chapter.findOne({_id:id})
-            if(Chapterdetails){
+            const chapterdetails = await Chapter.findOne({_id:id})
+            if(chapterdetails){
+                    const courseDetails= await Course.findById({_id:chapterdetails.course})
+                    chapterdetails.course = courseDetails
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({message: ErrorMessages.GETDATA,
-                        data:Chapterdetails
+                        data:chapterdetails
                     })
             }
             else{
@@ -157,7 +166,7 @@ router.delete('/chapter/delete/:id', async(req,res) => {
                         .status(HTTPStatusCode.OK)
                         .json({
                             message:ErrorMessages.DELETED,
-                            contetn: ChapterDelete
+                            data: ChapterDelete
                         })
                 }
                 else{
