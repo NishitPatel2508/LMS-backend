@@ -4,6 +4,10 @@ const router = express.Router()
 const Content = require("../models/contentModel")
 const Course = require("../models/courseModel")
 const Chapter = require('../models/chapterModel');
+const Category = require("../models/categoryModel")
+const Subcategory = require("../models/subcategoryModel")
+const ProgrammingLanguage = require("../models/programmingLanguagesModel")
+const Language = require("../models/languageModel")
 const ContentVideo = require('../models/contnetVideoModel');
 const ObjectId = mongoose.Types.ObjectId
 const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
@@ -19,24 +23,43 @@ router.post('/content/create', async(req,res) => {
         const courseID = await Course.findById({_id:course})
         const chapterDetailes = await Chapter.findById({_id:chapter})
         const contentVideoID = await ContentVideo.findById({_id:contentVideo})
+        if(courseID){
+            
+            const category = await Category.findById({_id:courseID.category})
+            if(category){
+                courseID.category = category
+            }
+            const subCategory = await Subcategory.findById({_id:courseID.subCategory})
+            if(subCategory){
+                courseID.subCategory = subCategory
+            }
+            const programmingLanguage = await ProgrammingLanguage.findById({_id: courseID.programmingLanguage})
+            if(programmingLanguage){
+                courseID.programmingLanguage = programmingLanguage
+            }
+            const language = await Language.findById({_id:courseID.language})
+            if(language){
+                courseID.language = language;
+            }
+        }
         //Chapter is Exist in Content MODEL
-        if(chapterDetailes._id == chapter){
-            return res
-            .status(HTTPStatusCode.BAD_REQUEST)
-            .json({
-                 message: ErrorMessages.CONTENT_EXIST
-            }) 
-        }
+        // if(chapterDetailes._id == chapter){
+        //     return res
+        //     .status(HTTPStatusCode.BAD_REQUEST)
+        //     .json({
+        //          message: ErrorMessages.CONTENT_EXIST
+        //     }) 
+        // }
         //Content Video is Exist in Content MODEL
-        if(contentVideoID == contentVideo){
-            return res
-            .status(HTTPStatusCode.BAD_REQUEST)
-            .json({
-                 message: ErrorMessages.CONTENT_VIDEO_EXIST
-            }) 
-        }
+        // if(contentVideoID == contentVideo){
+        //     return res
+        //     .status(HTTPStatusCode.BAD_REQUEST)
+        //     .json({
+        //          message: ErrorMessages.CONTENT_VIDEO_EXIST
+        //     }) 
+        // }
         
-        if(chapterDetailes.course._id == course){
+        
             const createContent = await Content.create({
                 courseDetailes:courseID,
                 chapterDetailes:chapterDetailes,
@@ -48,14 +71,13 @@ router.post('/content/create', async(req,res) => {
                     message:ErrorMessages.CREATED,
                     data: createContent,
                  })
-        }
-        else{
-            return res
-            .status(HTTPStatusCode.BAD_REQUEST)
-            .json({
-                 message: ErrorMessages.INVALID_CHAPTER
-            }) 
-        }
+       
+            // return res
+            // .status(HTTPStatusCode.BAD_REQUEST)
+            // .json({
+            //      message: ErrorMessages.INVALID_CHAPTER
+            // }) 
+        
     } catch (error) {
         return res
             .status(HTTPStatusCode.INTERNAL_SERVER)
@@ -70,13 +92,32 @@ router.get('/getAllContent', async(req,res) => {
         const getAllContent = await Content.find()
         if(getAllContent){
             for(const field of getAllContent) {
-                const courseInfo = await Course.findById({_id:field.courseDetailes})
-                if(courseInfo){
-                    field.courseDetailes = courseInfo
+                const course = await Course.findById({_id:field.courseDetailes})
+                if(course){
+                    field.courseDetailes = course
+                    const category = await Category.findById({_id:field.courseDetailes.category})
+                    if(category){
+                        field.courseDetailes.category = category
+                    }
+                    const subCategory = await Subcategory.findById({_id:field.courseDetailes.subCategory})
+                    if(subCategory){
+                        field.courseDetailes.subCategory = subCategory
+                    }
+                    const programmingLanguage = await ProgrammingLanguage.findById({_id: field.courseDetailes.programmingLanguage})
+                    if(programmingLanguage){
+                        field.courseDetailes.programmingLanguage = programmingLanguage
+                    }
+                    const language = await Language.findById({_id:field.courseDetailes.language})
+                    if(language){
+                        field.courseDetailes.language = language;
+                    }
                 }
                 const chapter = await Chapter.findById({_id:field.chapterDetailes})
                 if(chapter){
-                    console.log(chapter.course);
+                    const course = await Course.findById({_id:chapter.course})
+                    if(course){
+                        chapter.course = course
+                    }
                     field.chapterDetailes = chapter
                 }
                 const contentVideo = await ContentVideo.findById({_id:field.contentVideoDetailes})
@@ -86,7 +127,8 @@ router.get('/getAllContent', async(req,res) => {
                
             }
 
-        }        
+        } 
+      
         return res
             .status(HTTPStatusCode.OK)
             .json({

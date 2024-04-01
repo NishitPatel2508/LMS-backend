@@ -2,7 +2,7 @@ const  mongoose  = require("mongoose");
 
 const instructorSchema = mongoose.Schema(
     {
-        courseId:{
+        courseDetails:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Course"
         },

@@ -2,14 +2,26 @@ const mongoose = require("mongoose")
 const express = require("express")
 const router = express.Router()
 const Review = require("../models/reviewModel")
+const Course = require("../models/courseModel")
+const User = require("../models/userModel")
 const ObjectId = mongoose.Types.ObjectId
 const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
 
 //Create
 router.post('/review/create', async(req,res) => {
-    const {rate,experience} = req.body
+    const { 
+            course,
+            user,
+            rate,
+            experience
+        } = req.body;
     try {
+        
+        const userInfo = await User.findById({_id:user})
+        const courseInfo = await Course.findById({_id:course})
         const createReview = await Review.create({
+            userDetails:userInfo,
+            courseDetails:courseInfo,
             rate: rate,
             experience:experience
         })
@@ -33,6 +45,16 @@ router.post('/review/create', async(req,res) => {
 router.get('/getAllReview', async(req,res) =>{
     try {
         const getAllReview = await Review.find()
+        for (const field of getAllReview) {
+            const userInfo = await User.findById({_id:field.userDetails})
+            if(userInfo){
+                field.userDetails = userInfo
+            }
+            const courseInfo = await Course.findById({_id:field.courseDetails})
+            if(courseInfo){
+                field.courseDetails = courseInfo
+            }
+        }
         return res
                 .status(HTTPStatusCode.OK)
                 .json({
@@ -55,6 +77,14 @@ router.get('/review/:id', async(req,res) => {
     try {
         if(ObjectId.isValid(id)){
             const getSingleReview = await Review.findOne({_id:id})
+            const userInfo = await User.findById({_id:getSingleReview.userDetails})
+            if(userInfo){
+                getSingleReview.userDetails = userInfo
+            }
+            const courseInfo = await Course.findById({_id:getSingleReview.courseDetails})
+            if(courseInfo){
+                getSingleReview.courseDetails = courseInfo
+            }
             return res
                 .status(HTTPStatusCode.OK)
                 .json({

@@ -1,6 +1,10 @@
 const mongoose = require("mongoose")
 const contentVideoSchema = mongoose.Schema(
     {
+        chapterDetailes:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"Chapter"
+        },
         thumbnail:{
             type: String,
             require: [true, "Please, Enter thubnail of video"]
