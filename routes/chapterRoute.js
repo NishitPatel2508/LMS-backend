@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 const express = require("express")
 const ObjectId =  mongoose.Types.ObjectId;
 const Chapter = require("../models/chapterModel")
+const ContentVideo = require("../models/contnetVideoModel")
 const Course = require("../models/courseModel")
 const router = express.Router()
 const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
@@ -51,6 +52,7 @@ router.post('/chapter/create' , async(req,res) =>{
 router.get('/getAllChapter' , async(req,res) =>{
     try{
         const getAllChapter = await Chapter.find()
+        
         for (const field of getAllChapter) {
             if(getAllChapter){
                 const courseDetails= await Course.findById({_id:field.course})
