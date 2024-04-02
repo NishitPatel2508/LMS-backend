@@ -17,14 +17,11 @@ router.post('/content/create', async(req,res) => {
     try {
         const {  
                 course,
-                chapter,
-                contentVideo,    
+                chapter,    
             } = req.body
         const courseID = await Course.findById({_id:course})
         const chapterDetailes = await Chapter.findById({_id:chapter})
-        const contentVideoID = await ContentVideo.findById({_id:contentVideo})
         if(courseID){
-            
             const category = await Category.findById({_id:courseID.category})
             if(category){
                 courseID.category = category
@@ -42,6 +39,17 @@ router.post('/content/create', async(req,res) => {
                 courseID.language = language;
             }
         }
+        const contentVideoAllInfo = await ContentVideo.find();
+        const contentVideoInfo = []
+        for (const field of contentVideoAllInfo) {
+            if(field.chapterDetailes == chapter){
+                    contentVideoInfo.push(field);
+                    console.log(contentVideoInfo);
+                
+                
+            }
+        }
+       
         //Chapter is Exist in Content MODEL
         // if(chapterDetailes._id == chapter){
         //     return res
@@ -63,7 +71,7 @@ router.post('/content/create', async(req,res) => {
             const createContent = await Content.create({
                 courseDetailes:courseID,
                 chapterDetailes:chapterDetailes,
-                contentVideoDetailes:contentVideoID
+                contentVideoDetailes:contentVideoInfo
             })
             return res
                 .status(HTTPStatusCode.CREATED)
@@ -90,6 +98,7 @@ router.post('/content/create', async(req,res) => {
 router.get('/getAllContent', async(req,res) => {
     try {
         const getAllContent = await Content.find()
+     
         if(getAllContent){
             for(const field of getAllContent) {
                 const course = await Course.findById({_id:field.courseDetailes})
@@ -119,16 +128,36 @@ router.get('/getAllContent', async(req,res) => {
                         chapter.course = course
                     }
                     field.chapterDetailes = chapter
+                    // console.log(field.contentVideoDetailes);
                 }
-                const contentVideo = await ContentVideo.findById({_id:field.contentVideoDetailes})
-                if(contentVideo){
-                    field.contentVideoDetailes = contentVideo
-                }
-               
-            }
 
+                // const contentVideo = await ContentVideo.findById({_id:c})
+                // if(contentVideo){
+                //     field.contentVideoDetailes.push(contentVideo)
+                // }
+             
+                const contentVideoAllInfo = await ContentVideo.find();
+                const idOfNotIncludVideo = []
+                const contentVideoInfo =field.contentVideoDetailes
+                for (const k of contentVideoInfo) {
+                    idOfNotIncludVideo.push(k._id)
+                }
+                for (const fieldOfContent of contentVideoAllInfo) {
+                    for (const i of idOfNotIncludVideo) {
+                        
+                    }
+                            if(k._id != fieldOfContent._id){
+                                if(fieldOfContent._id){
+                                    contentVideoInfo.push(fieldOfContent)
+                                }
+                               
+                            
+                        
+                    }
+                }    
+            }
         } 
-      
+
         return res
             .status(HTTPStatusCode.OK)
             .json({
@@ -158,9 +187,15 @@ router.get('/content/:id', async(req,res) =>{
                 if(chapter){
                     getSingleContent.chapterDetailes = chapter
                 }
-                const contentVideo = await ContentVideo.findById({_id:getSingleContent.contentVideoDetailes})
-                if(contentVideo){
-                    getSingleContent.contentVideoDetailes = contentVideo
+               
+                const contentVideoAllInfo = await ContentVideo.find();
+                const contentVideoInfo = []
+                for (const field of contentVideoAllInfo) {
+                    if(field.chapterDetailes == chapter){
+                        contentVideoInfo.push(field);
+                        getSingleContent.contentVideoDetailes = contentVideoInfo;
+                        console.log(contentVideoInfo);
+                    }
                 }
                 return res
                     .status(HTTPStatusCode.OK)
