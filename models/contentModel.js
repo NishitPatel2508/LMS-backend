@@ -14,7 +14,7 @@ const contentSchema = mongoose.Schema(
             ref:"ContentFile"
         },
         contentVideoDetailes:{
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.Array,
             ref:"ContentVideo"
         },
         createdBy:{

@@ -13,9 +13,7 @@ const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
 //Create
 router.post('/contentvideo/create', async(req,res) => {
     const {chapter,videoLink,thumbnail} = req.body;
-    
     const chapterInfo = await Chapter.findById({_id:chapter});
-        
     // console.log(chapterInfo);
     
 
@@ -57,7 +55,7 @@ router.get('/getAllContentVideo' , async(req,res) =>{
         const getAllContentVideo = await ContentVideo.find()
         if(getAllContentVideo){
             for (const field of getAllContentVideo) {
-                console.log(field.chapterDetailes);
+                // console.log(field.chapterDetailes);
                 // console.log("object");
                 const chapterInfo = await Chapter.findById({_id:field.chapterDetailes});
                 field.chapterDetailes=chapterInfo
