@@ -45,8 +45,6 @@ router.post('/content/create', async(req,res) => {
             if(field.chapterDetailes == chapter){
                     contentVideoInfo.push(field);
                     console.log(contentVideoInfo);
-                
-                
             }
         }
        
@@ -131,30 +129,42 @@ router.get('/getAllContent', async(req,res) => {
                     // console.log(field.contentVideoDetailes);
                 }
 
-                // const contentVideo = await ContentVideo.findById({_id:c})
+                // const contentVideo = await ContentVideo.find()
                 // if(contentVideo){
                 //     field.contentVideoDetailes.push(contentVideo)
                 // }
-             
+                // let len = field.contentVideoDetailes.length
+                
                 const contentVideoAllInfo = await ContentVideo.find();
-                const idOfNotIncludVideo = []
-                const contentVideoInfo =field.contentVideoDetailes
-                for (const k of contentVideoInfo) {
-                    idOfNotIncludVideo.push(k._id)
-                }
-                for (const fieldOfContent of contentVideoAllInfo) {
-                    for (const i of idOfNotIncludVideo) {
-                        
+                console.log(contentVideoAllInfo.length);
+                const idOfNotIncludVideo = contentVideoAllInfo.reverse()
+                    for (const fieldOfContent  of idOfNotIncludVideo) { 
+                        field.contentVideoDetailes.push(fieldOfContent)
+                            if(contentVideoAllInfo.length === field.contentVideoDetailes.length){
+                                break
+                            }
                     }
-                            if(k._id != fieldOfContent._id){
-                                if(fieldOfContent._id){
-                                    contentVideoInfo.push(fieldOfContent)
-                                }
-                               
-                            
-                        
-                    }
-                }    
+                     
+                    
+                //     console.log(temp);
+                //     for(const k of temp){
+                //         for (const j of field.contentVideoDetailes) {
+                //             if(field.contentVideoDetailes.includes(k) != true){
+                //                 if(k.test(j)){
+                //                     continue
+                //                 } else {
+                //                     field.contentVideoDetailes.push(k)
+                //                 }
+                                    
+                                
+                //             }
+                           
+                //         }
+                //        
+                // // if(field.contentVideoDetailes.includes(k) == false){           
+                //     } 
+                   
+                
             }
         } 
 
