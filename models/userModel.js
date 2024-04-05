@@ -3,7 +3,6 @@ const userSchema = new mongoose.Schema(
     {
         firstName:{
             type: String,
-          
             lowercase:true
         },
         lastName:{

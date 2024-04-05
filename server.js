@@ -15,6 +15,9 @@ const global = require("./global.ts")
 //User
 const userRoute = require("./routes/userRoute")
 
+//Login
+const loginRoute = require("./routes/loginRoute.js")
+
 //Country
 const countryRoute = require("./routes/countryRoute.js")
 
@@ -74,6 +77,7 @@ app.get("/",(req,res) =>{
     res.send("api running abc")
 })
 app.use(userRoute);
+app.use(loginRoute);
 app.use(countryRoute);
 app.use(stateRoute);
 app.use(cityRoute);

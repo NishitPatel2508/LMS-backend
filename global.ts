@@ -8,9 +8,12 @@ class HTTPStatusCode {
 }
 class ErrorMessages {
     USER_REGISTER_SUCCESS = "User Registred Successfully";
+    LOGIN_SUCCESS = "Login Successfully";
+    PASSWORD_DOES_NOT_MATCH= "Password does not match.";
     USER_REGISTER_FAILED = "User Registration Failed";
     USER_EXIST = "User already exists";
     EMAIL_EXIST = "Email already exists";
+    EMAIL_DOES_NOT_EXIST = "Email does not exists";
     COUNTRY_EXIST = "Country already exists";
     STATE_EXIST = "Country already exists";
     CITY_EXIST = "City already exists";
