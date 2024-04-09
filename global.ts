@@ -14,6 +14,7 @@ class ErrorMessages {
     USER_EXIST = "User already exists";
     EMAIL_EXIST = "Email already exists";
     EMAIL_DOES_NOT_EXIST = "Email does not exists";
+    INVALID_EMAIL = "Invalid Email ID";
     COUNTRY_EXIST = "Country already exists";
     STATE_EXIST = "Country already exists";
     CITY_EXIST = "City already exists";
@@ -30,6 +31,7 @@ class ErrorMessages {
     INVALID_CHAPTER = "Chapter is from another Course";
     WRONG_CREDENTIALS = "Invalid Credentials";
     SUCCESS = "Login Successfully";
+    OTP_SENT = "OTP send to your email successfully";
     NOT_EXISTS = "Data does not exists";
     SAVED = "Saved Successfully";
     CREATED = "Created Successfully";
