@@ -17,7 +17,10 @@ const userRoute = require("./routes/userRoute")
 
 //Login
 const loginRoute = require("./routes/loginRoute.js")
-
+//Forgot Password
+const forgotPasswordRoute = require("./routes/forgotPasswordRoute.js")
+//New Password
+const newPasswordRoute = require("./routes/newPasswordRoute.js")
 //Country
 const countryRoute = require("./routes/countryRoute.js")
 
@@ -92,3 +95,5 @@ app.use(ReviewRoute);
 app.use(ContentRoute);
 app.use(CourseRoute);
 app.use(InstructorRoute);
+app.use(forgotPasswordRoute);
+app.use(newPasswordRoute);

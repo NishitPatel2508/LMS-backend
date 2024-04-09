@@ -15,11 +15,15 @@ router.post('/user/login', async(req,res) =>{
             console.log(userExist.password); 
             if(userExist.email){
                 if(userExist.password === password){
+                    const userLogin = await Login.create({
+                        email:email,
+                        password:password
+                    })
                     return res
                         .status(HTTPStatusCode.OK)
                         .json({
                             message:ErrorMessages.LOGIN_SUCCESS,
-                            data:userExist
+                            data:userLogin
                     })
                 } else {
                     return res
@@ -47,6 +51,20 @@ router.post('/user/login', async(req,res) =>{
         }
 
       
+    } catch (error) {
+        return res
+            .status(HTTPStatusCode.INTERNAL_SERVER)
+            .json({message:ErrorMessages.INTERNAL_SERVER})
+    }
+})
+router.get('/user/allLoginData', async(req,res)=>{
+    try {
+        const allLoginData = await Login.find()
+        return res
+            .status(HTTPStatusCode.OK)
+            .json({message:ErrorMessages.GETDATA,
+                data:allLoginData
+        })
     } catch (error) {
         return res
             .status(HTTPStatusCode.INTERNAL_SERVER)
