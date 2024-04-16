@@ -21,14 +21,7 @@ const loginRoute = require("./routes/loginRoute.js")
 const forgotPasswordRoute = require("./routes/forgotPasswordRoute.js")
 //New Password
 const newPasswordRoute = require("./routes/newPasswordRoute.js")
-//Country
-const countryRoute = require("./routes/countryRoute.js")
 
-//State
-const stateRoute = require("./routes/stateRoute.js")
-
-//City 
-const cityRoute = require("./routes/cityRoute.js")
 
 //Category
 const categoryRoute = require("./routes/categoryRoute.js")
@@ -63,6 +56,10 @@ const CourseRoute = require("./routes/courseRoute.js")
 //Instructor
 const InstructorRoute = require('./routes/instructorRoute.js')
 
+//Dashboard
+const DashboardRoute = require('./routes/dashboardRoute.js')
+//
+// const InstructorLoginRoute = require("./")
 // console.log(mongoose.version); 
 mongoose.connect(process.env.URI)
 .then(()=>{
@@ -81,9 +78,7 @@ app.get("/",(req,res) =>{
 })
 app.use(userRoute);
 app.use(loginRoute);
-app.use(countryRoute);
-app.use(stateRoute);
-app.use(cityRoute);
+
 app.use(categoryRoute);
 app.use(subCategoryRoute);
 app.use(ProgrammingLanguageRoute);
@@ -97,3 +92,4 @@ app.use(CourseRoute);
 app.use(InstructorRoute);
 app.use(forgotPasswordRoute);
 app.use(newPasswordRoute);
+app.use(DashboardRoute);

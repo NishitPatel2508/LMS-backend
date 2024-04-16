@@ -10,7 +10,7 @@ var nodemailer = require('nodemailer');
 const Mailgen = require("mailgen");
 const {EMAIL,PASSWORD} = require("../routes/env")
 router.post('/user/forgotpassword/', async(req,res)=>{
-    const {email} = req.body;
+    const {email,password} = req.body;
     try {
         const userExist = await Login.findOne({email:email})
         if(userExist){
@@ -31,8 +31,14 @@ router.post('/user/forgotpassword/', async(req,res)=>{
                     email:email,
                     otp:otps
                 })
-                
-                
+                const updatePasswordOfUser = await User.findOne({email:forgotPasswordUser.email})
+                console.log(updatePasswordOfUser._id);
+                const fpuserid = updatePasswordOfUser._id
+                const setNewPasswordOfUser = await User.findById({_id:fpuserid})
+                if(setNewPasswordOfUser){
+                    const userWithUpdatedPassword = await updatePasswordOfUser.updateOne({password:password})
+                    console.log(updatePasswordOfUser);
+                }
                 let config = {
                     service: 'gmail',
                     auth: {
@@ -57,7 +63,8 @@ router.post('/user/forgotpassword/', async(req,res)=>{
                             table:{
                                 data:[
                                     {
-                                        OTP:otps
+                                        OTP:otps,
+                                        
                                     }
                                 ]
                             },
@@ -69,7 +76,7 @@ router.post('/user/forgotpassword/', async(req,res)=>{
                       from: EMAIL,
                       to: email,
                       subject: 'OTP successfully sent',
-                      text: 'OTP successfully sent',
+                      text: `OTP successfully sent `,
                       html:mail
                 };
                 transporter.sendMail(message).then(()=>{
@@ -77,7 +84,7 @@ router.post('/user/forgotpassword/', async(req,res)=>{
                         .status(HTTPStatusCode.OK)
                         .json({
                                 message:ErrorMessages.OTP_SENT,
-                                data:forgotPasswordUser
+                                data:forgotPasswordUser                                // data1:
                         })   
                 })
                 .catch(()=>{
@@ -87,11 +94,9 @@ router.post('/user/forgotpassword/', async(req,res)=>{
                                 message:ErrorMessages.NOT_FOUND
                         })    
                 })
-                const updatePassword = await User.findOne({email:email})
-                console.log(updatePassword._id);
-                console.log(updatePassword.password);
-                const fpuserid = updatePassword._id
-                
+               
+                // console.log(setNewPasswordOfUser);
+                // updatePassword()
 
             } else {
                 return res
@@ -117,16 +122,59 @@ router.post('/user/forgotpassword/', async(req,res)=>{
             })
     }
 })
-// router.get('/user/forgotpassword/alldata', async(req,res) => {
-//     try {
-        
-//     } catch (error) {
-//         return res
-//         .status(HTTPStatusCode.INTERNAL_SERVER)
-//         .json({ 
-//             message:ErrorMessages.INTERNAL_SERVER,
-//             error:error.message
-//         })
-//     }
-// })
+router.get('/user/forgotpassword/alldata', async(req,res) => {
+    try {
+        const Alldata = await ForgotPassword.find()
+        return res
+        .status(HTTPStatusCode.OK)
+        .json({
+                message:ErrorMessages.GETDATA,
+                data:Alldata
+        }) 
+    } catch (error) {
+        return res
+        .status(HTTPStatusCode.INTERNAL_SERVER)
+        .json({ 
+            message:ErrorMessages.INTERNAL_SERVER,
+            error:error.message
+        })
+    }
+})
+router.delete('/user/forgotpassword/delete', async(req,res) =>{
+    const id = req.params.id
+    try {
+        if(ObjectId.isValid(id)){
+            const forgotpasswordUserDelete = await ForgotPassword.deleteMany({email:email});
+            if(forgotpasswordUserDelete){
+                return res
+                    .status(HTTPStatusCode.OK)
+                    .json({
+                        message: ErrorMessages.DELETED,
+                        data: forgotpasswordUserDelete
+                    })
+            }
+            else{
+                return res
+                    .status(HTTPStatusCode.BAD_REQUEST)
+                    .json({
+                        message: ErrorMessages.NOT_EXISTS
+                    }) 
+            }
+        } else {
+            return res
+                    .status(HTTPStatusCode.INTERNAL_SERVER)
+                    .json({
+                        message:ErrorMessages.WRONG_CREDENTIALS,
+                        
+                    })
+        }
+    } catch (error) {
+        return res
+            .status(HTTPStatusCode.INTERNAL_SERVER)
+             .json({
+                message:ErrorMessages.INTERNAL_SERVER,
+                error:error.message
+        })
+    }
+})
 module.exports = router;

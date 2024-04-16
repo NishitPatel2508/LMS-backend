@@ -2,16 +2,20 @@ const express = require("express")
 const mongoose = require("mongoose")
 const router = express.Router()
 const Instructor = require("../models/instructorModel")
+const InstructorLogin = require("../models/instructorLogin")
 const Course = require("../models/courseModel")
 const ObjectId = mongoose.Types.ObjectId;
 const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
-
+const {authenticateToken} = require("../authenticateToken")
+const jwt = require("jsonwebtoken")
 //Create
 router.post('/instructor/create', async(req,res) => {
     try {
         const { 
-                courseId,
+                // courseId,
                 name,
+                email,
+                password,
                 experience,
                 about,
                 linkedin,
@@ -19,10 +23,13 @@ router.post('/instructor/create', async(req,res) => {
                 twitter,
                 discord
             } = req.body;
-        const courseInfo = await Course.findById({_id:courseId})
+        // const courseInfo = await Course.findById({_id:courseId})
+        // courseDetails:courseInfo
         const instructorCreate = await Instructor.create({
-            courseDetails:courseInfo,
+           
             name:name,
+            email:email,
+            password:password,
             experience:experience,
             about:about,
             linkedin:linkedin,
@@ -47,21 +54,22 @@ router.post('/instructor/create', async(req,res) => {
 })
 
 //Get All
-router.get('/getAllInstructor', async(req,res)=>{
+router.get('/getAllInstructor', authenticateToken,async(req,res)=>{
     try {
         const getAllInstructor = await Instructor.find()
-        if(getAllInstructor){
-            for (const field of getAllInstructor) {
-                const courseInfo = await Course.findById({_id:field.courseDetails})
-                field.courseDetails= courseInfo
-            }
-        }
-        return res  
-            .status(HTTPStatusCode.OK)
-            .json({
-                message:ErrorMessages.GETDATA,
-                data:getAllInstructor
+        // if(getAllInstructor){
+        //     for (const field of getAllInstructor) {
+        //         const courseInfo = await Course.findById({_id:field.courseDetails})
+        //         field.courseDetails= courseInfo
+        //     }
+        // 
+            return res  
+                .status(HTTPStatusCode.OK)
+                .json({
+                    message:ErrorMessages.GETDATA,
+                    data:getAllInstructor
             })
+        // }
     } catch (error) {
         return res
             .status(HTTPStatusCode.INTERNAL_SERVER)
@@ -73,14 +81,14 @@ router.get('/getAllInstructor', async(req,res)=>{
 })
 
 //Get single Instructor
-router.get('/instructor/:id', async(req,res) => {
+router.get('/instructor/:id', authenticateToken,async(req,res) => {
     try {
         const id = req.params.id;
         if(ObjectId.isValid(id)){
             const getSingleInstructor = await Instructor.findById({_id:id});
             if(getSingleInstructor){
-                const courseInfo = await Course.findById({_id:getSingleInstructor.courseDetails})
-                getSingleInstructor.courseDetails = courseInfo;
+                // const courseInfo = await Course.findById({_id:getSingleInstructor.courseDetails})
+                // getSingleInstructor.courseDetails = courseInfo;
 
                 return res
                     .status(HTTPStatusCode.OK)
@@ -106,7 +114,7 @@ router.get('/instructor/:id', async(req,res) => {
     }
 })
 //Update 
-router.patch('/instructor/update/:id', async(req,res) => {
+router.patch('/instructor/update/:id',authenticateToken, async(req,res) => {
     const id = req.params.id;
     try {
         if(ObjectId.isValid(id)){
@@ -115,8 +123,8 @@ router.patch('/instructor/update/:id', async(req,res) => {
             })
           
             if(instructorUpdate){
-                const courseInfo = await Course.findById({_id:instructorUpdate.courseDetails})
-                instructorUpdate.courseDetails = courseInfo;
+                // const courseInfo = await Course.findById({_id:instructorUpdate.courseDetails})
+                // instructorUpdate.courseDetails = courseInfo;
                 return res  
                 .status(HTTPStatusCode.OK)
                 .json({
@@ -148,7 +156,7 @@ router.patch('/instructor/update/:id', async(req,res) => {
     }
 })
 //Delete
-router.delete('/instructor/delete/:id', async(req,res) => {
+router.delete('/instructor/delete/:id',authenticateToken, async(req,res) => {
     const id= req.params.id
     try {
         if(ObjectId.isValid(id)){
@@ -183,6 +191,75 @@ router.delete('/instructor/delete/:id', async(req,res) => {
                 message:ErrorMessages.INTERNAL_SERVER,
                 error:error.message
         })
+    }
+})
+
+//instructor Login
+router.post('/instructor/login', async(req,res) =>{
+    const{email,password} = req.body
+    try {
+        const instructorExist = await Instructor.findOne({email:email})
+        if(instructorExist){
+            if(instructorExist.email){
+                if(instructorExist.password === password){
+                    const accessToken = jwt.sign(
+                        { id: instructorExist._id },
+                        process.env.ACCESS_TOKEN_SECRET,
+                        {
+                          expiresIn: '10000m',
+                        },
+                      );
+                      const refreshToken = jwt.sign(
+                        { id: instructorExist._id },
+                        process.env.REFRESH_TOKEN_SECRET,
+                      );
+                    const instructorLogin = await InstructorLogin.create({
+                        email:email,
+                        password:password
+                    })
+                    return res
+                        .status(HTTPStatusCode.OK)
+                        .json({
+                            message:ErrorMessages.LOGIN_SUCCESS,
+                            data:{
+                                Instructor: instructorLogin,
+                                accessToken: accessToken,
+                                refreshToken: refreshToken,
+                            }
+                    })
+                } else {
+                    return res
+                    .status(HTTPStatusCode.BAD_REQUEST)
+                    .json({
+                            message:ErrorMessages.PASSWORD_DOES_NOT_MATCH,
+                            data:ErrorMessages.PASSWORD_DOES_NOT_MATCH
+                    })
+                }
+            } else {
+                return res
+                .status(HTTPStatusCode.BAD_REQUEST)
+                .json({
+                        message:ErrorMessages.EMAIL_DOES_NOT_EXIST
+                })   
+            }
+
+        } else {
+            return res
+                .status(HTTPStatusCode.BAD_REQUEST)
+                .json({
+                        message:ErrorMessages.EMAIL_DOES_NOT_EXIST,
+                        
+                })
+        }
+
+      
+    } catch (error) {
+        return res
+            .status(HTTPStatusCode.INTERNAL_SERVER)
+            .json({
+                message:ErrorMessages.INTERNAL_SERVER,
+                error:error.message
+            })
     }
 })
 module.exports = router;

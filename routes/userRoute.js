@@ -4,6 +4,7 @@ const router = express.Router();
 const User = require("../models/userModel");
 const ObjectId = require("mongoose").Types.ObjectId;
 const { HTTPStatusCode, ErrorMessages}= require("../global.ts")
+const {authenticateToken} = require("../authenticateToken")
 //User Create
 router.post('/users/createuser', async (req,res)=>{
     const {firstname,lastname,gender,mobile,email,password,address,city,state,country,pincode,usertype,createdBy} =  req.body;
@@ -72,7 +73,7 @@ router.get('/users/:id', async(req,res) => {
   }
 })
 //Update
-router.patch('/users/update/:id', async(req,res) => {
+router.patch('/users/update/:id',authenticateToken ,async(req,res) => {
     const id = req.params.id;
 
   try{
@@ -118,6 +119,30 @@ router.delete('/users/delete/:id', async(req,res) => {
   }
 })
 
-
+let refreshTokens = [];
+router.post('/generateToken', async (req, res) => {
+  const { id } = req.body;
+  try {
+    const doesUserExit = await User.findOne({ _id: id }).select('_id').lean();
+    if (doesUserExit) {
+      const user = { id: id };
+      const accessToken = generateAccessToken(user);
+      const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+      refreshTokens.push(refreshToken);
+      res.json({ accessToken: accessToken, refreshToken: refreshToken });
+    } else {
+      res
+        .status(HTTPStatusCode.INTERNAL_SERVER)
+        .json({ message: ErrorMessages.NOT_EXIST });
+    }
+  } catch (error) {
+    res
+      .status(HTTPStatusCode.INTERNAL_SERVER)
+      .json({ message: ErrorMessages.INTERNAL_SERVER });
+  }
+});
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
+}
 
 module.exports = router;
