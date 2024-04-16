@@ -7,11 +7,11 @@ const categorySchema = mongoose.Schema(
         },
         createdBy:{
             type: mongoose.Schema.Types.ObjectId,
-            ref:"User"
+            ref:"Instructor"
         },
         updatedBy:{
             type: mongoose.Schema.Types.ObjectId,
-            ref:"User"
+            ref:"Instructor"
         }
     }, {timestamps:true}
 )

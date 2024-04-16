@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const programmingLanguageSchema = mongoose.Schema(
     {
-        subCategoryId:{
+        subCategory:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Subcategory"
         },

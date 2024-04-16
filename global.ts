@@ -10,6 +10,7 @@ class ErrorMessages {
     USER_REGISTER_SUCCESS = "User Registred Successfully";
     LOGIN_SUCCESS = "Login Successfully";
     PASSWORD_DOES_NOT_MATCH= "Password does not match.";
+    PASSWORD_UPDATED= "Password successfully updated.";
     USER_REGISTER_FAILED = "User Registration Failed";
     USER_EXIST = "User already exists";
     EMAIL_EXIST = "Email already exists";
@@ -44,12 +45,14 @@ class ErrorMessages {
     VIDEO_UPLOAD = "Video Uploaded Successfully";
     INVALID_OBJECT_ID = "Invalid Objectid";
     COURSE_NOT_FOUND = "Course does not exists";
+    INSTRUCTOR_NOT_EXIST = "Instructor does not exists";
     CATEGORY_NOT_FOUND = "Category does not exists";
     SUBCATEGORY_NOT_FOUND = "Subcategory does not exists";
     LANGUAGE_NOT_FOUND = "Language does not exists";
     FILE_NOT_FOUND = "File does not exists";
     VIDEO_NOT_FOUND = "Video does not exists";
-    REVIEW_ADD = "Review added Successfully"
+    REVIEW_ADD = "Review added Successfully";
+    INVALID = "Invalid Credentials"
 }
 module.exports.HTTPStatusCode = new HTTPStatusCode()
 module.exports.ErrorMessages = new  ErrorMessages()

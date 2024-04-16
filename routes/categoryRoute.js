@@ -4,24 +4,40 @@ const router = express.Router();
 const Category = require("../models/categoryModel")
 const ObjectId = mongoose.Types.ObjectId;
 const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+const {authenticateToken} = require("../authenticateToken");
+const Instructor = require("../models/instructorModel");
 //Create
-router.post("/category/create", async(req,res) =>{
+router.post("/category/create", authenticateToken,async(req,res) =>{
     const {categoryName} = req.body;
+    const userid = req.user.id
+    // createdBy = instructorExist;
     try{
-        const singleCategory = await Category.findOne({categoryName:categoryName})
-        if(singleCategory){
+        const instructorExist = await Instructor.findById({_id:userid})
+        if(instructorExist){
+            console.log(instructorExist);
+            const singleCategory = await Category.findOne({categoryName:categoryName})
+            // const instructorInfo = Instructor.findById({_id:createdBy})
+            if(singleCategory){
+                return res
+                    .status(HTTPStatusCode.BAD_REQUEST)
+                    .json({message:ErrorMessages.CATEGORY_EXIST})
+            }
+            const createCategory = await Category.create({
+                categoryName:categoryName,
+                createdBy:instructorExist
+            })
+            return res
+                .status(HTTPStatusCode.CREATED)
+                .json({message:ErrorMessages.CREATED,
+                    data:createCategory
+                })
+        } else {
             return res
                 .status(HTTPStatusCode.BAD_REQUEST)
-                .json({message:ErrorMessages.CATEGORY_EXIST})
-        }
-        const createCategory = await Category.create({
-            categoryName:categoryName
-        })
-        return res
-            .status(HTTPStatusCode.CREATED)
-            .json({message:ErrorMessages.CREATED,
-                data:createCategory
+                .json({message:ErrorMessages.INSTRUCTOR_NOT_EXIST,
             })
+        }
+ 
     }catch{
         return res
             .status(HTTPStatusCode.INTERNAL_SERVER)
@@ -30,14 +46,19 @@ router.post("/category/create", async(req,res) =>{
 })
 
 //Get All data
-router.get('/getAllCategory', async(req,res) =>{
+router.get('/getAllCategory', authenticateToken, async(req,res) =>{
+    const userid = req.user.id;
+    console.log(userid);
     try{
-        const getAllCategory = await Category.find()
-        return res
-             .status(HTTPStatusCode.OK)
-             .json({message:ErrorMessages.GETDATA,
-                 data:getAllCategory
-        })
+        const instructorExist = await Instructor.findById({_id:userid})
+        if(instructorExist){
+            const getAllCategory = await Category.find()
+            return res
+                 .status(HTTPStatusCode.OK)
+                 .json({message:ErrorMessages.GETDATA,
+                     data:getAllCategory
+            })
+        }
     }catch{
         return res
         .status(HTTPStatusCode.INTERNAL_SERVER)
@@ -46,28 +67,33 @@ router.get('/getAllCategory', async(req,res) =>{
 })
 
 //Get Single Data
-router.get('/category/:id' , async(req,res) =>{
+router.get('/category/:id' , authenticateToken, async(req,res) =>{
     const id = req.params.id;
+    const userid = req.user.id;
+    console.log(userid);
     try{
-        if(ObjectId.isValid(id)){
-            const singleCategory = await Category.findOne({_id:id})
-            if(singleCategory){
-                return res
-                    .status(HTTPStatusCode.OK)
-                    .json({message:ErrorMessages.GETDATA,
-                        data:singleCategory
-                    })
+        const instructorExist = await Instructor.findById({_id:userid})
+        if(instructorExist){
+            if(ObjectId.isValid(id)){
+                const singleCategory = await Category.findOne({_id:id})
+                if(singleCategory){
+                    return res
+                        .status(HTTPStatusCode.OK)
+                        .json({message:ErrorMessages.GETDATA,
+                            data:singleCategory
+                        })
+                }
+                else{
+                    return res
+                        .status(HTTPStatusCode.BAD_REQUEST)
+                        .json({message:ErrorMessages.NOT_EXISTS})
+                }
             }
             else{
                 return res
-                    .status(HTTPStatusCode.BAD_REQUEST)
-                    .json({message:ErrorMessages.NOT_EXISTS})
+                .status(HTTPStatusCode.BAD_REQUEST)
+                .json({message:ErrorMessages.WRONG_CREDENTIALS})
             }
-        }
-        else{
-            return res
-            .status(HTTPStatusCode.BAD_REQUEST)
-            .json({message:ErrorMessages.WRONG_CREDENTIALS})
         }
     }catch{
         return res
@@ -78,34 +104,44 @@ router.get('/category/:id' , async(req,res) =>{
 })
 
 //Update
-router.patch('/category/update/:id', async(req,res) =>{
+router.patch('/category/update/:id', authenticateToken, async(req,res) =>{
     const id = req.params.id;
+    const userid = req.user.id
     try{
-        if(ObjectId.isValid(id)){
-            const updateCategory = await Category.findByIdAndUpdate(id, req.body,
-                {
-                    new:true
-                }
-            )
-           if(updateCategory){
+        const instructorExist = await Instructor.findById({_id:userid})
+        if(instructorExist){
+            if(ObjectId.isValid(id)){
+                const updateCategory = await Category.findByIdAndUpdate(id, req.body,
+                    {
+                        new:true
+                    }
+                )
+               if(updateCategory){
+                    return res
+                    .status(HTTPStatusCode.OK)
+                    .json({message:ErrorMessages.UPDATED,
+                        data:updateCategory,
+                    })
+               }
+               else{
+                    return res
+                    .status(HTTPStatusCode.BAD_REQUEST)
+                    .json({message:ErrorMessages.NOT_EXISTS})
+               }
+            }
+            else{
                 return res
-                .status(HTTPStatusCode.OK)
-                .json({message:ErrorMessages.UPDATED,
-                    data:updateCategory
+                    .status(HTTPStatusCode.BAD_REQUEST)
+                    .json({message:ErrorMessages.WRONG_CREDENTIALS,
                 })
-           }
-           else{
-                return res
-                .status(HTTPStatusCode.BAD_REQUEST)
-                .json({message:ErrorMessages.NOT_EXISTS})
-           }
-        }
-        else{
+            }
+        } else {
             return res
                 .status(HTTPStatusCode.BAD_REQUEST)
-                .json({message:ErrorMessages.WRONG_CREDENTIALS,
+                .json({message:ErrorMessages.INSTRUCTOR_NOT_EXIST,
             })
         }
+     
     }catch{
         return res
             .status(HTTPStatusCode.INTERNAL_SERVER)
@@ -114,10 +150,13 @@ router.patch('/category/update/:id', async(req,res) =>{
 })
 
 //Delete
-router.delete('/category/delete/:id', async(req,res) =>{
+router.delete('/category/delete/:id', authenticateToken, async(req,res) =>{
     const id = req.params.id;
+    const userid = req.user.id
     try{
-        if(ObjectId.isValid(id)){
+        const instructorExist = await Instructor.findById({_id:userid})
+        if(instructorExist){
+            if(ObjectId.isValid(id)){
             const deleteCategory = await Category.findByIdAndDelete(id)
            if(deleteCategory){
                 return res
@@ -131,11 +170,17 @@ router.delete('/category/delete/:id', async(req,res) =>{
                 .status(HTTPStatusCode.BAD_REQUEST)
                 .json({message:ErrorMessages.NOT_EXISTS})
            }
-        }
-        else{
+            }
+             else{
             return res
                 .status(HTTPStatusCode.BAD_REQUEST)
                 .json({message:ErrorMessages.WRONG_CREDENTIALS,
+            })
+            }
+        } else {
+            return res
+                .status(HTTPStatusCode.BAD_REQUEST)
+                .json({message:ErrorMessages.INSTRUCTOR_NOT_EXIST,
             })
         }
     }catch{
