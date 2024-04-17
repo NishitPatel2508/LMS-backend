@@ -146,7 +146,7 @@ router.get('/course/:id',authenticateToken, async(req,res) =>{
         const instructorExist = await Instructor.findById({_id:userid})
         if(instructorExist){
             if(ObjectId.isValid(id)){
-                const getSingleCourse = await Course.findOne({createdBy: userid})
+                const getSingleCourse = await Course.findById({_id: id})
                 if(getSingleCourse){
                         const category = await Category.findById({_id:getSingleCourse.category})
                         if(category){
