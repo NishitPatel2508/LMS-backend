@@ -1,6 +1,7 @@
 const express = require("express")
 const mongoose = require("mongoose")
 const router = express.Router()
+const path = require("path")
 const Instructor = require("../models/instructorModel")
 const InstructorLogin = require("../models/instructorLogin")
 const Course = require("../models/courseModel")
@@ -8,6 +9,19 @@ const ObjectId = mongoose.Types.ObjectId;
 const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
 const {authenticateToken} = require("../authenticateToken")
 const jwt = require("jsonwebtoken")
+const multer = require("multer")
+const app = express();
+// Storage
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const Storage = multer.diskStorage({
+    destination: function (req, file, cb) { let dest = path.join(__dirname, '../uploads'); cb(null, dest);  },
+    filename: (req, file, cb) =>{
+        cb(null, file.originalname);
+    },
+})
+const upload = multer({
+    storage:Storage
+}).single('file')
 //Create
 router.post('/instructor/create', async(req,res) => {
     try {
@@ -16,26 +30,34 @@ router.post('/instructor/create', async(req,res) => {
                 name,
                 email,
                 password,
+                gender,
+                mobile,
                 experience,
                 about,
                 linkedin,
                 instagram,
                 twitter,
-                discord
+                discord,
+                nameOfImg,
             } = req.body;
         // const courseInfo = await Course.findById({_id:courseId})
         // courseDetails:courseInfo
+        // const insdtructorImg = req.file.originalname
+        // console.log("img",insdtructorImg);
+        // console.log("imgName",req.file.originalname);
         const instructorCreate = await Instructor.create({
-           
             name:name,
             email:email,
             password:password,
+            mobile:mobile,
+            gender:gender,
             experience:experience,
             about:about,
             linkedin:linkedin,
             instagram:instagram,
             twitter:twitter,
-            discord:discord
+            discord:discord,
+          
         })
         return res
                 .status(HTTPStatusCode.CREATED)
@@ -81,28 +103,27 @@ router.get('/getAllInstructor', authenticateToken,async(req,res)=>{
 })
 
 //Get single Instructor
-router.get('/instructor/:id', authenticateToken,async(req,res) => {
-    try {
-        const id = req.params.id;
-        if(ObjectId.isValid(id)){
-            const getSingleInstructor = await Instructor.findById({_id:id});
-            if(getSingleInstructor){
-                // const courseInfo = await Course.findById({_id:getSingleInstructor.courseDetails})
-                // getSingleInstructor.courseDetails = courseInfo;
-
+router.get('/instructor/get', authenticateToken,async(req,res) => {
+    const id = req.params.id;
+    const userid = req.user.id;
+    console.log(userid);
+    try{
+        const instructorExist = await Instructor.findById({_id:userid})
+        if(instructorExist){
+            if(instructorExist){
                 return res
                     .status(HTTPStatusCode.OK)
                     .json({
                         message: ErrorMessages.GETDATA,
-                        data: getSingleInstructor
-                    })
-            } else{
-                return res
-                    .status(HTTPStatusCode.BAD_REQUEST)
-                    .json({
-                        message:ErrorMessages.NOT_EXISTS,
+                        data: instructorExist
                     })
             }
+        } else{
+            return res
+                .status(HTTPStatusCode.BAD_REQUEST)
+                .json({
+                    message:ErrorMessages.NOT_EXISTS,
+                })
         }
     } catch (error) {
         return res
@@ -114,11 +135,12 @@ router.get('/instructor/:id', authenticateToken,async(req,res) => {
     }
 })
 //Update 
-router.patch('/instructor/update/:id',authenticateToken, async(req,res) => {
+router.patch('/instructor/update/:id',authenticateToken, upload,async(req,res) => {
     const id = req.params.id;
+    
     try {
         if(ObjectId.isValid(id)){
-            const instructorUpdate = await Instructor.findByIdAndUpdate(id, req.body, {
+            const instructorUpdate = await Instructor.findByIdAndUpdate(id,req.body,{profileImg:req.file.originalname}, {
                 new:true
             })
           
@@ -262,4 +284,7 @@ router.post('/instructor/login', async(req,res) =>{
             })
     }
 })
+
+
+// Revanue
 module.exports = router;

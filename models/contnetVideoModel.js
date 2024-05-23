@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const contentVideoSchema = mongoose.Schema(
     {
-        chapterDetailes:{
+        chapter:{
             type: mongoose.Schema.Types.ObjectId,
             ref:"Chapter"
         },
