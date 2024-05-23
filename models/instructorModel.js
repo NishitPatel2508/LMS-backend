@@ -18,6 +18,14 @@ const instructorSchema = mongoose.Schema(
             type:String,
             // require:[true,"Please, Enter name of Instructor"]
         },
+        gender:{
+            type: String,
+            lowercase:true
+        },
+        mobile:{
+            type:String,
+            // unique:[true, "Phone Number is already exist."],   
+        },
         profileImg:{
             type:String,
             // require:[true,"Please, Uplaod image of Instructor"]

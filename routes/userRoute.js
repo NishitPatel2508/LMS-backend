@@ -1,37 +1,42 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
+const cookie = require("cookie-parser")
+const jwt = require("jsonwebtoken")
 const User = require("../models/userModel");
 const ObjectId = require("mongoose").Types.ObjectId;
 const { HTTPStatusCode, ErrorMessages}= require("../global.ts")
 const {authenticateToken} = require("../authenticateToken")
 //User Create
 router.post('/users/createuser', async (req,res)=>{
-    const {firstname,lastname,gender,mobile,email,password,address,city,state,country,pincode,usertype,createdBy} =  req.body;
+    const {name,email,password,createdBy} =  req.body;
     try{
+        // Check User already exist or not
         const singleData = await User.findOne({email: email}) 
-        if(singleData){
+        if(singleData){ 
             return res.status(HTTPStatusCode.BAD_REQUEST).json({message: ErrorMessages.EMAIL_EXIST})
         }
-        const singleDataPhone = await User.findOne({mobile: mobile}) 
-        if(singleDataPhone){
-            return res.status(HTTPStatusCode.BAD_REQUEST).json({message: ErrorMessages.MOBILE_NO_EXIST})
-        }
+
+        // Encrypt Password
+        const myEncryptedPassword = await bcrypt.hash(password,10);
         const userCreate = await User.create({
-            firstName:firstname,
-            lastName:lastname,
-            gender:gender,
-            mobile:mobile,
+           name:name,
             email:email,
-            password:password,
-            address:address,
-            city:city,
-            state:state,
-            country:country,
-            pincode:pincode,
-            usertype:usertype,
-            createdBy:createdBy
+            password:myEncryptedPassword,
+           
         }) 
+
+        // Generate Token
+        const token = jwt.sign(
+          {id:userCreate._id, email},
+          'shhhh',
+          {
+            expiresIn:"2h"
+          }
+        )
+        userCreate.token = token;
+        userCreate.password = undefined;
         return res.status(HTTPStatusCode.CREATED).json({ message: ErrorMessages.USER_REGISTER_SUCCESS, data:userCreate})
 
     } catch(error){

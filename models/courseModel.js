@@ -14,6 +14,10 @@ const courseSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref:"Subcategory",
         },
+        chapter:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"Chapter",
+        },
         programmingLanguage:{
             type: mongoose.Schema.Types.ObjectId,
             ref:"ProgrammingLanguage",
@@ -27,7 +31,7 @@ const courseSchema = new mongoose.Schema(
             required:[true, "Please, enter description"],
         },
         content:{
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.Array,
             // required:[true, "Please, content of course"],
             ref:"Content",
         },

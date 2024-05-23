@@ -1,12 +1,16 @@
 const mongoose = require("mongoose")
 const contentFileSchema = mongoose.Schema(
     {
-        ppt:{
-            type: String
+        name:{
+            type:String,
+            required:true
+        },
+        chapter:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"Chapter"
         },
         pdf:{
-            type: String,
-            require: [true, "Please, upload PDF related content"]
+            type:String,
         },
         createdBy:{
             type: mongoose.Schema.Types.ObjectId,

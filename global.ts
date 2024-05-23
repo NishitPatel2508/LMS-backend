@@ -9,6 +9,9 @@ class HTTPStatusCode {
 class ErrorMessages {
     USER_REGISTER_SUCCESS = "User Registred Successfully";
     LOGIN_SUCCESS = "Login Successfully";
+    LOGIN_FIRST = "Please Login First";
+    INVALID_TOKEN = "Invalid Token";
+    UPLOAD_SUCCESS = "File Uploaded Successfully";
     PASSWORD_DOES_NOT_MATCH= "Password does not match.";
     PASSWORD_UPDATED= "Password successfully updated.";
     USER_REGISTER_FAILED = "User Registration Failed";
@@ -19,7 +22,7 @@ class ErrorMessages {
     COUNTRY_EXIST = "Country already exists";
     STATE_EXIST = "Country already exists";
     CITY_EXIST = "City already exists";
-    COURSE_EXIST = "Course already exists";
+    COURSE_EXIST = "Course already you created.";
     CONTENT_EXIST = "Content already exists";
     CONTENT_VIDEO_EXIST = "Content Video already exists";
     MOBILE_NO_EXIST = "Mobile Number already exists";
@@ -40,6 +43,7 @@ class ErrorMessages {
     UPDATED = "Updated Successfully";
     DELETED = "Deleted Successfully";
     NOT_FOUND = "Record not found";
+    REVIEW_NOT = "There is no review about this course"
     INTERNAL_SERVER = 'Server error!';
     ADDED = "Record Added Successfully";
     VIDEO_UPLOAD = "Video Uploaded Successfully";
@@ -52,7 +56,11 @@ class ErrorMessages {
     FILE_NOT_FOUND = "File does not exists";
     VIDEO_NOT_FOUND = "Video does not exists";
     REVIEW_ADD = "Review added Successfully";
-    INVALID = "Invalid Credentials"
+    INVALID = "Invalid Credentialsssss"
+    PAYMENT_VARFIED_SUCCESS = "Payment Varifies Successfully"
+    PAYMENT_VARFIED_FAIL = "Payment Varifies Fail"
+    MYCOURSE_SUCCESS = "Course added to mycourse successfully."
+    MYCOURSE_FAIL = "Course is fail to added to my course."
 }
 module.exports.HTTPStatusCode = new HTTPStatusCode()
 module.exports.ErrorMessages = new  ErrorMessages()

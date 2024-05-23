@@ -1,15 +1,21 @@
 const express = require("express")
 const app = express();
 const mongoose = require("mongoose")
-
+const path = require("path")
 const dotenv  = require("dotenv")
 dotenv.config()
-
+const cookie = require("cookie-parser")
 const cors = require("cors")
 app.use(cors())
 
 app.use(express.json())
+app.use(cookie());
+const bodyParser = require("body-parser");
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:false}))
 const global = require("./global.ts")
+const Razorpay = require('razorpay');
+
 
 
 //User
@@ -44,6 +50,9 @@ const ContentVideoRoute = require("./routes/contentVideoRoute.js")
 //Video
 const VideoRoute = require("./routes/videoRoute.js")
 
+// Files
+const FileRoute = require("./routes/contentFileRoute.js")
+
 //Review
 const ReviewRoute = require("./routes/reviewRoute.js")
 
@@ -58,7 +67,8 @@ const InstructorRoute = require('./routes/instructorRoute.js')
 
 //Dashboard
 const DashboardRoute = require('./routes/dashboardRoute.js')
-//
+//Payment 
+const PaymentRoute = require('./routes/paymentRoutes.js')
 // const InstructorLoginRoute = require("./")
 // console.log(mongoose.version); 
 mongoose.connect(process.env.URI)
@@ -76,6 +86,7 @@ mongoose.connect(process.env.URI)
 app.get("/",(req,res) =>{
     res.send("api running abc")
 })
+app.use('/uploads', express.static('uploads'));
 app.use(userRoute);
 app.use(loginRoute);
 
@@ -86,6 +97,7 @@ app.use(LanguageRoute);
 app.use(ChapterRoute);
 app.use(ContentVideoRoute);
 app.use(VideoRoute);
+app.use(FileRoute);
 app.use(ReviewRoute);
 app.use(ContentRoute);
 app.use(CourseRoute);
@@ -93,3 +105,8 @@ app.use(InstructorRoute);
 app.use(forgotPasswordRoute);
 app.use(newPasswordRoute);
 app.use(DashboardRoute);
+app.use(PaymentRoute);
+
+
+
+
