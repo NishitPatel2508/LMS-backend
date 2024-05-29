@@ -124,6 +124,7 @@ try {
             const price = courseDetails.price
             const instructorId = courseDetails.createdBy
             const buyDate = mycourse.createdAt
+            const courseName = courseDetails.name
             userExist.token = undefined
             userExist.email = undefined
             userExist.password = undefined
@@ -133,7 +134,7 @@ try {
                         const revenueDetails = await Revenue.create({
                                     // totalRevenue: r,
                                     courseAmount:price,
-                                    courseInfo:courseDetails,
+                                    courseInfo:courseName,
                                     userInfo:userExist,
                                     buyDate:buyDate,
                                     instructorInfo:instructorExist
@@ -227,85 +228,85 @@ try {
 });
 
 //Revenue
-router.post('/revenue', authenticateToken, async(req,res) =>{
-    const instructorid = req.user.id;
-    console.log(instructorid);
-    let r = 0
-    let price = 0
-    let revenueDetails = []
-    let userDetails = []
-    let d = 0
-    try {        
-        const instructorExist = await Instructor.findById({_id:instructorid})
-        if(instructorExist){
-            if(instructorExist){
-                instructorExist.profileImg = undefined
-            }
+// router.post('/revenue', authenticateToken, async(req,res) =>{
+//     const instructorid = req.user.id;
+//     console.log(instructorid);
+//     let r = 0
+//     let price = 0
+//     let revenueDetails = []
+//     let userDetails = []
+//     let d = 0
+//     try {        
+//         const instructorExist = await Instructor.findById({_id:instructorid})
+//         if(instructorExist){
+//             if(instructorExist){
+//                 instructorExist.profileImg = undefined
+//             }
 
-            const boughtCourses =  await MyCourses.find();
+//             const boughtCourses =  await MyCourses.find();
 
-            for (const i of boughtCourses) {
-                const singleCourse = await Course.findById({_id: i.course});
-                if(singleCourse){
-                    singleCourse.courseImg = undefined
-                    i.course = singleCourse
-                    if(singleCourse.createdBy == instructorid){
-                        price = singleCourse.price
-                        r += singleCourse.price
-                        d = singleCourse.createdAt
-                        console.log(singleCourse.name, "  ", singleCourse.price)
-                        const userInfo = await Users.findById({_id:i.user})
-                        if(userInfo){
-                            userInfo.token = undefined
-                            userInfo.email = undefined
-                            userInfo.password = undefined
-                            i.user = userInfo
-                        }
-                        revenueDetails.push(singleCourse)
-                        userDetails.push(userInfo)
-                        // if()
-                        // console.log(boughtCourses);
-                        // const coursealreadyExist = await Revenue.find({courseInfo:i.course})
-                        // const useralreadyExist = await Revenue.find({userinfo:i.user})
-                        // console.log("Course",coursealreadyExist);
-                        // console.log("User",useralreadyExist);
-                        // if(!(coursealreadyExist && useralreadyExist )){
-                        //     const all = await Revenue.create({
-                        //         // totalRevenue: r,
-                        //         courseAmount:price,
-                        //         courseInfo:singleCourse,
-                        //         userInfo:userInfo,
-                        //         buyDate:d,
-                        //         instructorInfo:instructorExist
-                        //     })
-                        //     revenueDetails.push(all)
-                        // }
+//             for (const i of boughtCourses) {
+//                 const singleCourse = await Course.findById({_id: i.course});
+//                 if(singleCourse){
+//                     singleCourse.courseImg = undefined
+//                     i.course = singleCourse
+//                     if(singleCourse.createdBy == instructorid){
+//                         price = singleCourse.price
+//                         r += singleCourse.price
+//                         d = singleCourse.createdAt
+//                         console.log(singleCourse.name, "  ", singleCourse.price)
+//                         const userInfo = await Users.findById({_id:i.user})
+//                         if(userInfo){
+//                             userInfo.token = undefined
+//                             userInfo.email = undefined
+//                             userInfo.password = undefined
+//                             i.user = userInfo
+//                         }
+//                         revenueDetails.push(singleCourse)
+//                         userDetails.push(userInfo)
+//                         // if()
+//                         // console.log(boughtCourses);
+//                         // const coursealreadyExist = await Revenue.find({courseInfo:i.course})
+//                         // const useralreadyExist = await Revenue.find({userinfo:i.user})
+//                         // console.log("Course",coursealreadyExist);
+//                         // console.log("User",useralreadyExist);
+//                         // if(!(coursealreadyExist && useralreadyExist )){
+//                         //     const all = await Revenue.create({
+//                         //         // totalRevenue: r,
+//                         //         courseAmount:price,
+//                         //         courseInfo:singleCourse,
+//                         //         userInfo:userInfo,
+//                         //         buyDate:d,
+//                         //         instructorInfo:instructorExist
+//                         //     })
+//                         //     revenueDetails.push(all)
+//                         // }
                        
-                    }
-                }
+//                     }
+//                 }
 
-            }
-            // console.log(revenueDetails)
-            console.log(d)
-            console.log(revenueDetails.length)
-            console.log(revenueDetails[revenueDetails.length-1])
-            console.log(userDetails)
-            console.log(userDetails[userDetails.length-1])
-            // console.log(userDetails[userDetails.length])
-            console.log(boughtCourses.length)
-            return res.status(HTTPStatusCode.OK).json({
-                data:revenueDetails,
-                message:ErrorMessages.GETDATA
-            })
-        }
-    } catch (error) {
-        return res.status(HTTPStatusCode.INTERNAL_SERVER)
-                    .json({
-                        data:ErrorMessages.INTERNAL_SERVER,
-                        message: error.message
-                    })
-    }
-})
+//             }
+//             // console.log(revenueDetails)
+//             console.log(d)
+//             console.log(revenueDetails.length)
+//             console.log(revenueDetails[revenueDetails.length-1])
+//             console.log(userDetails)
+//             console.log(userDetails[userDetails.length-1])
+//             // console.log(userDetails[userDetails.length])
+//             console.log(boughtCourses.length)
+//             return res.status(HTTPStatusCode.OK).json({
+//                 data:revenueDetails,
+//                 message:ErrorMessages.GETDATA
+//             })
+//         }
+//     } catch (error) {
+//         return res.status(HTTPStatusCode.INTERNAL_SERVER)
+//                     .json({
+//                         data:ErrorMessages.INTERNAL_SERVER,
+//                         message: error.message
+//                     })
+//     }
+// })
 
 router.get('/getAllRevenue',authenticateToken,async(req,res) =>{
     const instructorid = req.user.id;
@@ -316,11 +317,11 @@ router.get('/getAllRevenue',authenticateToken,async(req,res) =>{
         if(allDetails){
             for (const i of allDetails) {
         
-                    const singleCourse = await Course.findById({_id: i.courseInfo});
-                    if(singleCourse){
-                        singleCourse.courseImg = undefined
-                        i.courseInfo = singleCourse
-                    }
+                    // const singleCourse = await Course.findById({_id: i.courseInfo});
+                    // if(singleCourse){
+                    //     singleCourse.courseImg = undefined
+                    //     i.courseInfo = singleCourse
+                    // }
                     const userInfo = await Users.findById({_id:i.userInfo})
                     if(userInfo){
                         userInfo.token = undefined

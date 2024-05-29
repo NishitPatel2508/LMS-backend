@@ -12,8 +12,9 @@ const revenueSchema = mongoose.Schema(
             ref:"Instructor"
         },
         courseInfo:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"Course"
+            // type: mongoose.Schema.Types.ObjectId,
+            // ref:"Course"
+            type:String
         },
         buyDate:{
             type: Date
