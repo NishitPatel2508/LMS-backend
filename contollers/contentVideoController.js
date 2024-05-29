@@ -17,30 +17,33 @@ const createContentVideoController = async(req,res) => {
     const {chapter,videoLink,thumbnail,createdBy} = req.body;
     const chapterInfo = await Chapter.findById({_id:chapter});
     // console.log(chapterInfo);
-    // const videoLinkExist = await ContentVideo.findOne({videoLink:videoLink})
-    // if(videoLinkExist){
-    //     return res
-    //         .status(HTTPStatusCode.BAD_REQUEST)
-    //         .json({
-    //             message: ErrorMessages.VIDEO_EXIST})
-    // }
     const userid = req.user.id;
     console.log(userid);
     try{
         const instructorExist = await Instructor.findById({_id:userid})
         if(instructorExist){
-            const contentVideoCreate = await ContentVideo.create({
-                chapter:chapterInfo,
-                thumbnail:thumbnail,
-                videoLink:videoLink,
-                createdBy:instructorExist
-            })
-            return res
-                    .status(HTTPStatusCode.CREATED)
+            const videoLinkExist = await ContentVideo.findOne({videoLink:videoLink})
+            if(videoLinkExist){
+                return res
+                    .status(HTTPStatusCode.BAD_REQUEST)
                     .json({
-                        message:ErrorMessages.CREATED,
-                        data:contentVideoCreate
-                    })
+                        message: ErrorMessages.VIDEO_EXIST})
+            }
+            else {
+
+                const contentVideoCreate = await ContentVideo.create({
+                    chapter:chapterInfo,
+                    thumbnail:thumbnail,
+                    videoLink:videoLink,
+                    createdBy:instructorExist
+                })
+                return res
+                        .status(HTTPStatusCode.CREATED)
+                        .json({
+                            message:ErrorMessages.CREATED,
+                            data:contentVideoCreate
+                        })
+            }
         }
     } catch (error) {
         return res

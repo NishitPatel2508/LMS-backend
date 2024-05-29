@@ -25,7 +25,7 @@ const createChapterController =  async(req,res) =>{
         const instructorExist = await Instructor.findById({_id:userid})
         if(instructorExist){
             const courseID = await Course.findById({_id:course})
-            const chapterExist = await Chapter.findOne({chapterName:chapterName})
+            const chapterExist = await Chapter.findOne({chapterName:chapterName,course:course})
             if(chapterExist){
                 return res
                     .status(HTTPStatusCode.BAD_REQUEST)
