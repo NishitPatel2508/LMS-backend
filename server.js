@@ -13,7 +13,7 @@ app.use(cookie());
 const bodyParser = require("body-parser");
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
-const global = require("./global.ts")
+const global = require("./global.js")
 const Razorpay = require('razorpay');
 
 

@@ -4,7 +4,8 @@ const router = express.Router();
 const Language = require("../models/languageModel")
 const Instructor = require("../models/instructorModel");
 const ObjectId = mongoose.Types.ObjectId;
-const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+// const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const {authenticateToken} = require("../authenticateToken")
 //Create
 const createLanguageController =  async(req,res) =>{

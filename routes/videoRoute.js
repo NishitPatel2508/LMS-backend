@@ -3,7 +3,8 @@ const express = require("express")
 const router =express.Router()
 const Video = require("../models/videoModel")
 const ObjectId = mongoose.Types.ObjectId
-const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
+// const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const {authenticateToken} = require("../authenticateToken")
 const Instructor = require("../models/instructorModel");
 //Create

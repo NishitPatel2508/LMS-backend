@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken")
-const {HTTPStatusCode,ErrorMessages} = require("./global.ts")
+// const {HTTPStatusCode,ErrorMessages} = require("./global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("./global.js")
 const auth = (req,res,next)  =>{
     console.log(req.cookies)
     const {token} = req.cookies

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const Category = require("../models/categoryModel")
 const ObjectId = mongoose.Types.ObjectId;
-const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const Instructor = require("../models/instructorModel");
 
 //Create

@@ -9,7 +9,8 @@ const Chapter = require("../models/chapterModel")
 const ContentFile = require("../models/contentFileModel")
 const Language = require("../models/languageModel")
 const ObjectId = require("mongoose").Types.ObjectId
-const  {HTTPStatusCode,ErrorMessages} =  require("../global.ts")
+// const  {HTTPStatusCode,ErrorMessages} =  require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const ContentVideoes = require("../models/contnetVideoModel");
 // console.log(ErrorMessages. USER_EXIST);
 

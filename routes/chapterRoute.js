@@ -5,7 +5,8 @@ const Chapter = require("../models/chapterModel")
 const ContentVideo = require("../models/contnetVideoModel")
 const Course = require("../models/courseModel")
 const router = express.Router()
-const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+// const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const {authenticateToken} = require("../authenticateToken")
 const Instructor = require("../models/instructorModel");
 const {createChapterController,
