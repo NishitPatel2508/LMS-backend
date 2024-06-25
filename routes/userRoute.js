@@ -6,7 +6,8 @@ const cookie = require("cookie-parser")
 const jwt = require("jsonwebtoken")
 const User = require("../models/userModel");
 const ObjectId = require("mongoose").Types.ObjectId;
-const { HTTPStatusCode, ErrorMessages}= require("../global.ts")
+// const { HTTPStatusCode, ErrorMessages}= require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const {authenticateToken} = require("../authenticateToken")
 //User Create
 router.post('/users/createuser', async (req,res)=>{

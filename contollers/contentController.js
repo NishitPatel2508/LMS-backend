@@ -11,7 +11,8 @@ const Language = require("../models/languageModel")
 const ContentVideo = require('../models/contnetVideoModel');
 const ContentFile = require("../models/contentFileModel")
 const ObjectId = mongoose.Types.ObjectId
-const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
+// const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const {authenticateToken} = require("../authenticateToken")
 const Instructor = require("../models/instructorModel");
 // Create By using Id of Particular Course

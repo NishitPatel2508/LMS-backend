@@ -6,7 +6,8 @@ const Subcategory = require("../models/subcategoryModel")
 
 // const InstructorLogin = require("../models/instructorLogin")
 const ObjectId = mongoose.Types.ObjectId;
-const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+// const {HTTPStatusCode,ErrorMessages} = require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const {authenticateToken} = require("../authenticateToken")
 const Instructor = require("../models/instructorModel");
 

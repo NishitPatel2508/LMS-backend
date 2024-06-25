@@ -5,7 +5,8 @@ const Review = require("../models/reviewModel")
 const Course = require("../models/courseModel")
 const User = require("../models/userModel")
 const ObjectId = mongoose.Types.ObjectId
-const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
+// const {HTTPStatusCode, ErrorMessages} = require("../global.ts")
+const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 
 //Create
 const createReviewController = async(req,res) => {
