@@ -6,7 +6,11 @@ const dotenv  = require("dotenv")
 dotenv.config()
 const cookie = require("cookie-parser")
 const cors = require("cors")
-app.use(cors())
+app.use(cors({
+    origin:"https://brainwave-lilac-mu.vercel.app",
+    methods:["POST","GET","PATCH","DELETE"],
+    credentials:true
+}))
 
 app.use(express.json())
 app.use(cookie());
