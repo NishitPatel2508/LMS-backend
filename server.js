@@ -110,7 +110,7 @@ app.use(forgotPasswordRoute);
 app.use(newPasswordRoute);
 app.use(DashboardRoute);
 app.use(PaymentRoute);
-
+module.exports = app;
 
 
 
