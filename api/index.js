@@ -90,6 +90,9 @@ mongoose.connect(process.env.URI)
 app.get("/",(req,res) =>{
     res.send("api running abc")
 })
+const whitelist = [
+    '*'
+  ];
 app.use((req, res, next) => {
     const origin = req.get('referer');
     const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
