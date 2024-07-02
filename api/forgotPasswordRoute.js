@@ -9,7 +9,7 @@ const User = require("../models/userModel")
 const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 var nodemailer = require('nodemailer');
 const Mailgen = require("mailgen");
-const {EMAIL,PASSWORD} = require("../routes/env")
+const {EMAIL,PASSWORD} = require("../api/env")
 router.post('/user/forgotpassword/', async(req,res)=>{
     const {email,password} = req.body;
     try {

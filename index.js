@@ -23,56 +23,56 @@ const Razorpay = require('razorpay');
 
 
 //User
-const userRoute = require("./routes/userRoute.js")
+const userRoute = require("./api/userRoute.js")
 
 //Login
-const loginRoute = require("./routes/loginRoute.js")
+const loginRoute = require("./api/loginRoute.js")
 //Forgot Password
-const forgotPasswordRoute = require("./routes/forgotPasswordRoute.js")
+const forgotPasswordRoute = require("./api/forgotPasswordRoute.js")
 //New Password
-const newPasswordRoute = require("./routes/newPasswordRoute.js")
+const newPasswordRoute = require("./api/newPasswordRoute.js")
 
 
 //Category
-const categoryRoute = require("./routes/categoryRoute.js")
+const categoryRoute = require("./api/categoryRoute.js")
 
 //SubCategory
-const subCategoryRoute = require("./routes/subCategoryRoute.js")
+const subCategoryRoute = require("./api/subCategoryRoute.js")
 
 //Programming Languages
-const ProgrammingLanguageRoute = require("./routes/programmingLanguagesRoute.js")
+const ProgrammingLanguageRoute = require("./api/programmingLanguagesRoute.js")
 
 //Language
-const LanguageRoute = require("./routes/languageRoutes.js")
+const LanguageRoute = require("./api/languageRoutes.js")
 
 //Chapter
-const ChapterRoute = require("./routes/chapterRoute.js")
+const ChapterRoute = require("./api/chapterRoute.js")
 
 //ContentVideo
-const ContentVideoRoute = require("./routes/contentVideoRoute.js")
+const ContentVideoRoute = require("./api/contentVideoRoute.js")
 
 //Video
-const VideoRoute = require("./routes/videoRoute.js")
+const VideoRoute = require("./api/videoRoute.js")
 
 // Files
-const FileRoute = require("./routes/contentFileRoute.js")
+const FileRoute = require("./api/contentFileRoute.js")
 
 //Review
-const ReviewRoute = require("./routes/reviewRoute.js")
+const ReviewRoute = require("./api/reviewRoute.js")
 
 //Content
-const ContentRoute = require("./routes/contentRoute.js")
+const ContentRoute = require("./api/contentRoute.js")
 
 //Course
-const CourseRoute = require("./routes/courseRoute.js")
+const CourseRoute = require("./api/courseRoute.js")
 
 //Instructor
-const InstructorRoute = require('./routes/instructorRoute.js')
+const InstructorRoute = require('./api/instructorRoute.js')
 
 //Dashboard
-const DashboardRoute = require('./routes/dashboardRoute.js')
+const DashboardRoute = require('./api/dashboardRoute.js')
 //Payment 
-const PaymentRoute = require('./routes/paymentRoutes.js')
+const PaymentRoute = require('./api/paymentRoutes.js')
 // const InstructorLoginRoute = require("./")
 // console.log(mongoose.version); 
 mongoose.connect(process.env.URI)
