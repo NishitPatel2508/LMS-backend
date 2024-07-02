@@ -23,7 +23,7 @@
   "scripts": {
     "start": "node index.js ",
     "dev": "nodemon index.js",
-    "build": "rimraf build",
+    "build": "dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
