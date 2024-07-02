@@ -8,7 +8,7 @@ const cookie = require("cookie-parser")
 const cors = require("cors")
 // app.options('*', cors()) // include before other routes 
 app.use(cors({
-    origin:"https://brainwave-lilac-mu.vercel.app",
+    origin:"*",
     methods:["POST","GET","PATCH","DELETE"],
     credentials:true,
 }))
