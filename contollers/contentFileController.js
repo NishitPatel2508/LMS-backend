@@ -17,7 +17,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const uploadFileController =  async(req,res) =>{
     const userid = req.user.id;
     console.log(userid);
-    const {chapter,fileName} = req.body
+    const {chapter,fileName,pdf} = req.body
     try{
         const instructorExist = await Instructor.findById({_id:userid})
 
@@ -26,6 +26,7 @@ const uploadFileController =  async(req,res) =>{
             const uploadFiles = await ContentFile.create({
                 chapter:chapterInfo,
                 name:fileName,
+                pdf:pdf,
                 createdBy:instructorExist
             })
             // console.log(uploadFiles);
@@ -143,9 +144,10 @@ const updateContentFileController = async(req,res) =>{
         const instructorExist = await Instructor.findById({_id:userid})
         if(instructorExist){
             if(ObjectId.isValid(id)){
-                const updatedFile = await ContentFile.findByIdAndUpdate(id,{name:req.file.originalname,pdf:req.file.path},{
-                    new:true
-                })
+                const updatedFile = await ContentFile.findByIdAndUpdate(id,req.body,
+                    {
+                        new:true
+                    })
                 console.log(updatedFile);
                 if(updatedFile){
 
