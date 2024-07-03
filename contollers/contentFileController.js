@@ -9,12 +9,15 @@ const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const ContentFile = require("../models/contentFileModel")
 const Instructor = require("../models/instructorModel");
 const Chapter = require('../models/chapterModel');
+const { put } = require( '@vercel/blob');
+const fs = require('fs');
+// const vercelblob = require("vercel/blob")
 const Course = require("../models/courseModel")
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const uploadFileController =  async(req,res) =>{
     const userid = req.user.id;
     console.log(userid);
-    const {chapter,pdf} = req.body
+    const {chapter,fileName} = req.body
     try{
         const instructorExist = await Instructor.findById({_id:userid})
 
@@ -22,18 +25,22 @@ const uploadFileController =  async(req,res) =>{
             const chapterInfo = await Chapter.findById({_id:chapter});
             const uploadFiles = await ContentFile.create({
                 chapter:chapterInfo,
-                name:req.file.originalname,
-                // pdf:req.file.path,
-                // pdf:`http://localhost:${process.env.PORT}/uploads/${req.file.originalname}`,
+                name:fileName,
                 createdBy:instructorExist
             })
-            console.log(uploadFiles);
+            // console.log(uploadFiles);
             console.log(req.file);
+            
             return res.status(HTTPStatusCode.CREATED)
                         .json({
                             data:uploadFiles,
                             message: ErrorMessages.UPLOAD_SUCCESS
                         })
+        } else {
+            return res
+            .status(HTTPStatusCode.BAD_REQUEST)
+            .json({message:ErrorMessages.INSTRUCTOR_NOT_EXIST,
+        })
         }
     } catch (error) {
         return res

@@ -1,4 +1,5 @@
 // import * as path from 'path';
+// import { put } from '@vercel/blob';
 const mongoose = require("mongoose")
 const path = require("path")
 const express = require("express")
@@ -19,7 +20,7 @@ const upload = multer({
 }).single('file')
 // app.use('/uploads',express.static("/uploads"));
 
-router.post('/file/upload',authenticateToken,upload,uploadFileController) 
+router.post('/file/upload',authenticateToken,uploadFileController) 
 router.get('/allFiles',authenticateToken,getAllContentFileController) 
 router.get('/singleFile/:id',authenticateToken,getSingleContentFileController) 
 router.patch('/file/update/:id',authenticateToken,upload,updateContentFileController) 
