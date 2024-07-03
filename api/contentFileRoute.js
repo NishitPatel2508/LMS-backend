@@ -23,7 +23,7 @@ const upload = multer({
 router.post('/file/upload',authenticateToken,uploadFileController) 
 router.get('/allFiles',authenticateToken,getAllContentFileController) 
 router.get('/singleFile/:id',authenticateToken,getSingleContentFileController) 
-router.patch('/file/update/:id',authenticateToken,upload,updateContentFileController) 
+router.patch('/file/update/:id',authenticateToken,updateContentFileController) 
 router.delete('/file/delete/:id',authenticateToken,deleteContentFileController) 
 
 module.exports = router;
