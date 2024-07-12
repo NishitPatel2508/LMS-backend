@@ -1,7 +1,21 @@
 const express = require("express")
 const mongoose = require("mongoose")
+const app = express();
+const path = require("path")
+const multer = require("multer")
 const router  = express.Router();
 const {authenticateToken} = require("../authenticateToken")
+
+const Storage = multer.diskStorage({
+    destination: function (req, file, cb) { let dest = path.join(__dirname, '../uploads'); cb(null, dest);  },
+    filename: (req, file, cb) =>{
+        cb(null, file.originalname);
+    },
+})
+const upload = multer({
+    storage:Storage
+}).single('file')
+
 const { createCourseController, 
         getAllCourseController, 
         getSingleCourseController,
@@ -12,7 +26,7 @@ const { createCourseController,
     } = require("../contollers/courseController")
 
 //Create
-router.post('/course/createCourse',authenticateToken,createCourseController)
+router.post('/course/createCourse',upload,authenticateToken,createCourseController)
 //Get All Data
 router.get('/getAllCourse',authenticateToken, getAllCourseController)
 

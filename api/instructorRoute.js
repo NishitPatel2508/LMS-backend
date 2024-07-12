@@ -141,7 +141,7 @@ router.patch('/instructor/update/:id',authenticateToken, upload,async(req,res) =
     
     try {
         if(ObjectId.isValid(id)){
-            const instructorUpdate = await Instructor.findByIdAndUpdate(id,req.body,{profileImg:req.file.originalname}, {
+            const instructorUpdate = await Instructor.findByIdAndUpdate(id,req.body, {
                 new:true
             })
           

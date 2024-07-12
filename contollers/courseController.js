@@ -1,4 +1,6 @@
 const express = require("express")
+const app = express();
+const path = require("path");
 const Instructor = require("../models/instructorModel");
 const Course = require("../models/courseModel")
 const Content = require("../models/contentModel")
@@ -13,7 +15,7 @@ const ObjectId = require("mongoose").Types.ObjectId
 const {HTTPStatusCode,ErrorMessages} = require("../global.js")
 const ContentVideoes = require("../models/contnetVideoModel");
 // console.log(ErrorMessages. USER_EXIST);
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 const createCourseController = async(req,res) =>{
     const { 
             name,
@@ -39,6 +41,8 @@ const createCourseController = async(req,res) =>{
         } = req.body;
         const userid = req.user.id;
         console.log(userid);
+        console.log(req.file);
+        console.log(req.file);
         try{
             const category = await Category.findById({_id:categoryId});
             const subCategory = await Subcategory.findById({_id:subCategoryId});
@@ -76,7 +80,7 @@ const createCourseController = async(req,res) =>{
                         discount:discount,
                         level:level,
                         deadline:deadline,
-                        courseImg:courseImg,
+                        courseImg:courseImg ,
                         createdBy:instructorExist
                     }) 
                     return res
