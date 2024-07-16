@@ -2,6 +2,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const router = express.Router()
 const path = require("path")
+const bcrypt = require("bcryptjs");
 const Instructor = require("../models/instructorModel")
 const InstructorLogin = require("../models/instructorLogin")
 const Course = require("../models/courseModel")
@@ -46,10 +47,16 @@ router.post('/instructor/create', async(req,res) => {
         // const insdtructorImg = req.file.originalname
         // console.log("img",insdtructorImg);
         // console.log("imgName",req.file.originalname);
+        const singleData = await Instructor.findOne({email: email}) 
+        if(singleData){ 
+            return res.status(HTTPStatusCode.BAD_REQUEST).json({message: ErrorMessages.USER_EXIST})
+        }
+        
+        const myEncryptedPassword = await bcrypt.hash(password,10);
         const instructorCreate = await Instructor.create({
             name:name,
             email:email,
-            password:password,
+            password:myEncryptedPassword,
             mobile:mobile,
             gender:gender,
             experience:experience,
