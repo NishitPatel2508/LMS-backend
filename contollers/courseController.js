@@ -113,11 +113,18 @@ const createCourseController = async(req,res) =>{
 const getAllCourseController =  async(req,res) =>{
     const userid = req.user.id;
     console.log(userid);
+    const page = req.query.page || 1
+    const bookPerPage = 3
+    const skip = (page -  1)* bookPerPage
+    const query = {}
     try {
         const instructorExist = await Instructor.findById({_id:userid})
         if(instructorExist){
             console.log(instructorExist);
-            const getAllCourse = await Course.find({createdBy: userid});
+            const countCourse = await Course.estimatedDocumentCount(query)
+            const pageCount = countCourse / bookPerPage
+            const getAllCourse = await Course.find({createdBy: userid}).skip(skip).limit(bookPerPage);
+            const [count,items]  = await Promise.all([countCourse,getAllCourse])
             for (const fieldNames of getAllCourse) {
                 const category = await Category.findById({_id:fieldNames.category})
                 if(category){
@@ -140,7 +147,11 @@ const getAllCourseController =  async(req,res) =>{
                 .status(HTTPStatusCode.OK)
                 .json({
                     message: ErrorMessages.GETDATA,
-                    data: getAllCourse
+                    data: getAllCourse,
+                    pagination:{
+                        count,
+                        pageCount
+                    },
                 })
         }
     } catch (error) {
@@ -316,8 +327,10 @@ const deleteCourseController =  async(req,res) =>{
 const getAllCourseForUserController =  async(req,res) =>{
     // const userid = req.user.id;
     // console.log(userid);
+    const page = req.query.page || 0
+    const bookPerPage = 3
     try {
-            const getAllCourse = await Course.find();
+            const getAllCourse = await Course.find().skip(page * bookPerPage).limit(bookPerPage);
             for (const fieldNames of getAllCourse) {
                 const category = await Category.findById({_id:fieldNames.category})
                 if(category){

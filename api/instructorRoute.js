@@ -231,7 +231,7 @@ router.post('/instructor/login', async(req,res) =>{
         const instructorExist = await Instructor.findOne({email:email})
         if(instructorExist){
             if(instructorExist.email){
-                if(instructorExist.password === password){
+                if(instructorExist.password == password){
                     const accessToken = jwt.sign(
                         { id: instructorExist._id },
                         process.env.ACCESS_TOKEN_SECRET,
